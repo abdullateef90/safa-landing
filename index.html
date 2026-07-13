@@ -163,9 +163,9 @@ section{ position:relative; }
 @keyframes float{ 0%,100%{ transform:translateY(-10px); } 50%{ transform:translateY(10px); } }
 /* Hero ice — a unique CSS 3D hexagonal ice column: slow rotation, glassy
    translucent faces, frosted top, suspended bubbles, breathing glow. */
-.ice-scene{ position:relative; width:min(340px,74vw); height:360px; display:flex; align-items:center; justify-content:center; perspective:1100px; }
-.ice-tilt{ position:relative; width:236px; height:300px; transform-style:preserve-3d; transform:rotateX(-16deg); }
-.ice-spin{ position:absolute; inset:0; transform-style:preserve-3d; animation:iceSpin 24s linear infinite; }
+.ice-scene{ position:relative; width:min(340px,74vw); height:360px; display:flex; align-items:center; justify-content:center; perspective:1100px; -webkit-perspective:1100px; }
+.ice-tilt{ position:relative; width:236px; height:300px; transform-style:preserve-3d; -webkit-transform-style:preserve-3d; transform:rotateX(-16deg); -webkit-transform:rotateX(-16deg); }
+.ice-spin{ position:absolute; inset:0; transform-style:preserve-3d; -webkit-transform-style:preserve-3d; animation:iceSpin 24s linear infinite; -webkit-animation:iceSpin 24s linear infinite; }
 @keyframes iceSpin{ to{ transform:rotateY(360deg); } }
 .ice-face{
   position:absolute; left:50%; top:50%; width:118px; height:300px; margin:-150px 0 0 -59px; overflow:hidden;
@@ -319,8 +319,11 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
   *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
   .reveal{ opacity:1; transform:none; }
   .stage .col-wrap{ animation:none; }
-  /* hold the ice at a flattering static angle instead of spinning */
-  .ice-spin{ transform:rotateY(-26deg) !important; }
+  /* Keep the signature ice gently turning even when the phone has "Reduce Motion" on.
+     It's slow, ambient, and never flashes — safe for motion sensitivity, and it means
+     the hero never looks frozen/broken on an iPhone with that setting enabled. */
+  .ice-spin{ animation:iceSpin 44s linear infinite !important; -webkit-animation:iceSpin 44s linear infinite !important; }
+  .stage .glow{ animation:glowPulse 10s ease-in-out infinite !important; }
 }
 </style>
 
@@ -395,34 +398,52 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
     <div class="eyebrow reveal"><span class="no">02</span><span class="txt label" data-i18n="product.label">The mold</span></div>
     <div class="product-grid">
       <div class="product-visual reveal" id="productVisual">
-        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" id="productSVG" role="img" aria-label="SAFA insulated clear-ice mold">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="productSVG" role="img" aria-label="SAFA clear-ice mold — pack size and ice shape preview">
           <defs>
             <linearGradient id="iceFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF6FC"/><stop offset="1" stop-color="#A5D3E8"/></linearGradient>
             <linearGradient id="corkBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--tint-hi)"/><stop offset="1" stop-color="var(--tint-lo)"/></linearGradient>
+
+            <!-- ICE PIECE TEMPLATES — centered on origin, cloned once per cube in the pack -->
+            <g id="tmpl-hex">
+              <polygon points="-28,-34 -14,-26 -14,50 -28,42" fill="url(#iceFill)"/>
+              <polygon points="-14,-26 14,-26 14,50 -14,50" fill="url(#iceFill)"/>
+              <polygon points="14,-26 28,-34 28,42 14,50" fill="url(#iceFill)"/>
+              <polygon points="28,-34 14,-42 -14,-42 -28,-34 -14,-26 14,-26" fill="url(#iceFill)"/>
+              <polygon points="-14,-26 14,-26 14,50 -14,50" fill="#ffffff" opacity=".06"/>
+              <polygon points="14,-26 28,-34 28,42 14,50" fill="#0E1116" opacity=".05"/>
+              <g fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.2">
+                <polygon points="28,-34 14,-42 -14,-42 -28,-34 -14,-26 14,-26"/>
+                <polyline points="-28,-34 -28,42 -14,50 -14,-26"/>
+                <polyline points="14,-26 14,50 28,42 28,-34"/>
+                <polyline points="-14,50 14,50"/>
+              </g>
+            </g>
+            <g id="tmpl-cube">
+              <polygon points="0,-38 34,-19 0,0 -34,-19" fill="url(#iceFill)"/>
+              <polygon points="-34,-19 0,0 0,40 -34,21" fill="url(#iceFill)"/>
+              <polygon points="34,-19 0,0 0,40 34,21" fill="url(#iceFill)"/>
+              <polygon points="0,-38 34,-19 0,0 -34,-19" fill="#ffffff" opacity=".14"/>
+              <polygon points="34,-19 0,0 0,40 34,21" fill="#0E1116" opacity=".06"/>
+              <g fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="1.2">
+                <polygon points="0,-38 34,-19 0,0 -34,-19"/>
+                <polyline points="-34,-19 -34,21 0,40 34,21 34,-19"/>
+                <polyline points="0,0 0,40"/>
+              </g>
+            </g>
+            <g id="tmpl-sphere">
+              <circle cx="0" cy="2" r="34" fill="url(#iceFill)" stroke="#ffffff" stroke-opacity=".5"/>
+              <ellipse cx="-10" cy="-10" rx="11" ry="7" fill="#ffffff" opacity=".4"/>
+            </g>
           </defs>
-          <g id="moldBody">
-            <ellipse cx="200" cy="150" rx="118" ry="30" fill="var(--tint-hi)"/>
-            <path d="M82,150 L82,300 Q82,338 200,338 Q318,338 318,300 L318,150 Q318,180 200,180 Q82,180 82,150 Z" fill="url(#corkBody)"/>
-            <rect x="150" y="196" width="100" height="118" rx="12" fill="#0E1116" opacity=".14"/>
-            <rect x="150" y="196" width="100" height="118" rx="12" fill="none" stroke="#0E1116" stroke-opacity=".25"/>
-            <rect x="156" y="252" width="88" height="56" rx="7" fill="url(#iceFill)"/>
-            <line x1="150" y1="252" x2="250" y2="252" stroke="#ffffff" stroke-opacity=".8" stroke-width="2" stroke-dasharray="4 4"/>
-            <text x="256" y="256" font-family="JetBrains Mono, monospace" font-size="11" fill="#0E1116" opacity=".5" data-i18n="product.ready">ready</text>
+
+          <!-- Tinted mold base (changes with the selected colour) -->
+          <g id="trayBase">
+            <ellipse cx="200" cy="332" rx="128" ry="18" fill="#0E1116" opacity=".07"/>
+            <rect x="98" y="300" width="204" height="34" rx="17" fill="url(#corkBody)"/>
+            <rect x="120" y="306" width="160" height="6" rx="3" fill="#ffffff" opacity=".18"/>
           </g>
-          <g class="shape-group" data-shape="hex">
-            <polygon points="200,44 244,70 244,120 200,146 156,120 156,70" fill="url(#iceFill)" stroke="#ffffff" stroke-opacity=".7"/>
-            <polyline points="200,44 200,146" stroke="#ffffff" stroke-opacity=".4" fill="none"/>
-            <polygon points="200,44 244,70 200,96 156,70" fill="#ffffff" opacity=".25"/>
-          </g>
-          <g class="shape-group shape-hidden" data-shape="cube">
-            <polygon points="164,78 200,60 236,78 236,120 200,138 164,120" fill="url(#iceFill)" stroke="#ffffff" stroke-opacity=".7"/>
-            <polygon points="164,78 200,60 200,98 164,116" fill="#ffffff" opacity=".22"/>
-            <polygon points="236,78 200,60 200,98 236,116" fill="#ffffff" opacity=".10"/>
-          </g>
-          <g class="shape-group shape-hidden" data-shape="sphere">
-            <circle cx="200" cy="96" r="50" fill="url(#iceFill)" stroke="#ffffff" stroke-opacity=".7"/>
-            <ellipse cx="184" cy="80" rx="18" ry="12" fill="#ffffff" opacity=".35"/>
-          </g>
+          <!-- Ice pieces: count = pack size, form = shape. Rendered by JS. -->
+          <g id="iceCluster"></g>
         </svg>
         <div class="plate"></div>
       </div>
@@ -692,9 +713,9 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
     {en:"Desert Sage",   ar:"مريمية صحراوية",  sw:"#9CA88F", hi:"#AEB9A2", lo:"#7C876F"}
   ];
   var SIZES = [
-    {en:"Solo",      ar:"فردي",        subEn:"2 cubes",  subAr:"مكعّبان",   labelEn:"Solo · 2 cubes",       labelAr:"فردي · مكعّبان"},
-    {en:"Classic",   ar:"كلاسيكي",     subEn:"4 cubes",  subAr:"4 مكعّبات", labelEn:"Classic · 4 cubes",    labelAr:"كلاسيكي · 4 مكعّبات"},
-    {en:"Café Pack", ar:"عبوة المقهى", subEn:"12 cubes", subAr:"12 مكعّبًا", labelEn:"Café Pack · 12 cubes", labelAr:"عبوة المقهى · 12 مكعّبًا"}
+    {en:"Solo",      ar:"فردي",        count:2,  subEn:"2 cubes",  subAr:"مكعّبان",   labelEn:"Solo · 2 cubes",       labelAr:"فردي · مكعّبان"},
+    {en:"Classic",   ar:"كلاسيكي",     count:4,  subEn:"4 cubes",  subAr:"4 مكعّبات", labelEn:"Classic · 4 cubes",    labelAr:"كلاسيكي · 4 مكعّبات"},
+    {en:"Café Pack", ar:"عبوة المقهى", count:12, subEn:"12 cubes", subAr:"12 مكعّبًا", labelEn:"Café Pack · 12 cubes", labelAr:"عبوة المقهى · 12 مكعّبًا"}
   ];
   var SHAPES = [
     {en:"Hex Column",   ar:"عمود سداسي",  key:"hex",    subEn:"signature", subAr:"المميّز"},
@@ -716,9 +737,45 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
   var shapeWrap = document.getElementById("shapes");
   var langToggle= document.getElementById("langToggle");
   var wlCountLine = document.getElementById("wlCountLine");
+  var iceCluster  = document.getElementById("iceCluster");
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var XLINK = "http://www.w3.org/1999/xlink";
 
   function setTint(c){ svg.style.setProperty("--tint-hi", c.hi); svg.style.setProperty("--tint-lo", c.lo); }
-  function showShape(key){ svg.querySelectorAll(".shape-group").forEach(function(g){ g.classList.toggle("shape-hidden", g.getAttribute("data-shape") !== key); }); }
+
+  // Choose a tidy grid (cols × rows) for a given number of pieces.
+  function gridFor(n){
+    if(n<=1) return {c:1,r:1};
+    if(n<=2) return {c:2,r:1};
+    if(n<=4) return {c:2,r:2};
+    if(n<=6) return {c:3,r:2};
+    if(n<=9) return {c:3,r:3};
+    return {c:4, r:Math.ceil(n/4)};
+  }
+
+  // Draw the pack: one ice piece per cube, in the selected shape.
+  function renderProduct(){
+    var n = SIZES[selSize].count;
+    var shape = SHAPES[selShape].key;
+    var g = gridFor(n);
+    var AX = 70, AY = 56, AW = 260, AH = 220;      // drawing area above the base
+    var cellW = AW / g.c, cellH = AH / g.r;
+    var k = Math.min(cellW / 80, cellH / 104) * 0.9; // scale each piece to fit its cell
+    if(k > 1.2) k = 1.2;
+    iceCluster.textContent = "";
+    for(var idx = 0; idx < n; idx++){
+      var row = Math.floor(idx / g.c), col = idx % g.c;
+      var itemsInRow = Math.min(g.c, n - row * g.c);
+      var rowOffset = (g.c - itemsInRow) * cellW / 2;  // centre a short final row
+      var X = AX + rowOffset + cellW * (col + 0.5);
+      var Y = AY + cellH * (row + 0.5);
+      var use = document.createElementNS(SVGNS, "use");
+      use.setAttribute("href", "#tmpl-" + shape);
+      use.setAttributeNS(XLINK, "xlink:href", "#tmpl-" + shape); // Safari fallback
+      use.setAttribute("transform", "translate(" + X.toFixed(1) + "," + Y.toFixed(1) + ") scale(" + k.toFixed(3) + ")");
+      iceCluster.appendChild(use);
+    }
+  }
 
   /* ---- build configurator (once) -----------------------------------------*/
   // colours
@@ -742,6 +799,7 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
       selSize = idx;
       sizeWrap.querySelectorAll(".pill").forEach(function(p,i){ p.setAttribute("aria-pressed", i===idx?"true":"false"); });
       sizeNow.textContent = currentLang==="ar" ? s.labelAr : s.labelEn;
+      renderProduct();
     });
     sizeWrap.appendChild(b);
   });
@@ -753,7 +811,7 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
     b.addEventListener("click", function(){
       selShape = idx;
       shapeWrap.querySelectorAll(".pill").forEach(function(p,i){ p.setAttribute("aria-pressed", i===idx?"true":"false"); });
-      shapeNow.textContent = s[currentLang]; showShape(s.key);
+      shapeNow.textContent = s[currentLang]; renderProduct();
     });
     shapeWrap.appendChild(b);
   });
@@ -772,7 +830,7 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
     shapeNow.textContent = SHAPES[selShape][lang];
   }
 
-  setTint(COLORS[selColor]); showShape(SHAPES[selShape].key);
+  setTint(COLORS[selColor]); renderProduct();
 
   /* ---- waitlist counter line ----------------------------------------------*/
   var BASE_COUNT = 128;                 // starting counter number (placeholder)
