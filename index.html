@@ -655,58 +655,118 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
       <div class="life-copy">
         <div class="eyebrow reveal"><span class="no">05</span><span class="txt label">The pour</span></div>
         <h2 class="display reveal">Two cubes.<br>One perfect pour.</h2>
-        <p class="reveal">Brew hot, straight over two clear SAFA columns. They chill your iced V60 without watering it down — so the last sip tastes exactly like the first.</p>
-        <p class="life-note reveal">Kuwait → GCC · launching soon</p>
+        <p class="reveal">Brew hot, directly over two clear SAFA columns — for slower, more controlled dilution, and an iced coffee that stays balanced from first sip to last.</p>
       </div>
       <div class="life-glass reveal">
-        <svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An iced V60 — a tall glass of specialty coffee poured over a single crystal-clear SAFA ice column, on a warm café counter">
+        <svg viewBox="0 0 340 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An iced V60 — a tall glass of specialty coffee poured over two crystal-clear SAFA ice columns, lit like luxury coffee photography">
           <defs>
-            <linearGradient id="coffee" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A6338"/><stop offset="1" stop-color="#39220F"/></linearGradient>
-            <linearGradient id="lifeIce" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF8FD"/><stop offset="1" stop-color="#BBDDEC"/></linearGradient>
-            <clipPath id="glassIn"><path d="M80,84 L98,398 Q98,409 150,409 Q202,409 202,398 L220,84 Q220,97 150,97 Q80,97 80,84 Z"/></clipPath>
-            <filter id="bok" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="15"/></filter>
+            <radialGradient id="keyGlow" cx="50%" cy="34%" r="58%">
+              <stop offset="0" stop-color="#EACDA2" stop-opacity=".55"/><stop offset="1" stop-color="#EACDA2" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="coffeeRich" x1="0" y1="0" x2="0.25" y2="1">
+              <stop offset="0" stop-color="#B87B41"/><stop offset=".16" stop-color="#8A5024"/><stop offset=".6" stop-color="#4A2A14"/><stop offset="1" stop-color="#21110A"/>
+            </linearGradient>
+            <radialGradient id="crema" cx="42%" cy="34%" r="66%">
+              <stop offset="0" stop-color="#D69A5C"/><stop offset=".6" stop-color="#A2652F"/><stop offset="1" stop-color="#7C4A22"/>
+            </radialGradient>
+            <linearGradient id="iceLeft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6FCFE"/><stop offset="1" stop-color="#D3EAF5"/></linearGradient>
+            <linearGradient id="iceCtr"  x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4F4FC"/><stop offset="1" stop-color="#C2E1F0"/></linearGradient>
+            <linearGradient id="iceRight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6E2F0"/><stop offset="1" stop-color="#A6CEE2"/></linearGradient>
+            <linearGradient id="iceTop"   x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#DCEFF8"/></linearGradient>
+            <radialGradient id="drp" cx="34%" cy="28%" r="72%">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".92"/><stop offset=".5" stop-color="#D2E2EA" stop-opacity=".4"/><stop offset="1" stop-color="#5E727C" stop-opacity=".18"/>
+            </radialGradient>
+            <linearGradient id="frost" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#ffffff" stop-opacity=".07"/></linearGradient>
+            <clipPath id="gi"><path d="M90,96 L110,426 Q110,438 170,438 Q230,438 230,426 L250,96 Q250,110 170,110 Q90,110 90,96 Z"/></clipPath>
+            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+            <filter id="soft2" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="17"/></filter>
           </defs>
 
-          <!-- warm café bokeh -->
-          <g filter="url(#bok)" opacity=".55">
-            <circle cx="54" cy="120" r="26" fill="#C9A887"/>
-            <circle cx="256" cy="96" r="20" fill="#E7CFAA"/>
-            <circle cx="248" cy="250" r="30" fill="#A9855F"/>
-            <circle cx="40" cy="316" r="22" fill="#7E6142"/>
+          <!-- cinematic key light behind the glass -->
+          <ellipse cx="170" cy="196" rx="150" ry="188" fill="url(#keyGlow)"/>
+          <!-- warm café bokeh, out of focus -->
+          <g filter="url(#soft2)" opacity=".6">
+            <circle cx="52" cy="128" r="28" fill="#C9A887"/><circle cx="286" cy="104" r="22" fill="#E9D0AB"/>
+            <circle cx="284" cy="270" r="34" fill="#A9855F"/><circle cx="40" cy="330" r="24" fill="#7E6142"/>
+            <circle cx="176" cy="60" r="16" fill="#E9D0AB"/>
           </g>
 
-          <!-- counter reflection -->
-          <ellipse cx="150" cy="428" rx="92" ry="12" fill="#000000" opacity=".38"/>
+          <!-- contact shadow -->
+          <ellipse cx="170" cy="456" rx="100" ry="15" fill="#000000" opacity=".5" filter="url(#soft)"/>
 
-          <!-- glass back rim -->
-          <ellipse cx="150" cy="84" rx="72" ry="15" fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="2"/>
+          <!-- far rim of the glass -->
+          <ellipse cx="170" cy="92" rx="84" ry="18" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="2.5"/>
 
-          <!-- coffee -->
-          <g clip-path="url(#glassIn)">
-            <rect x="78" y="156" width="144" height="256" fill="url(#coffee)"/>
-            <ellipse cx="150" cy="156" rx="64" ry="10" fill="#A96D3E"/>
+          <!-- coffee, richly lit -->
+          <g clip-path="url(#gi)">
+            <rect x="88" y="178" width="164" height="262" fill="url(#coffeeRich)"/>
+            <ellipse cx="170" cy="178" rx="78" ry="13" fill="url(#crema)"/>
+            <ellipse cx="170" cy="178" rx="78" ry="13" fill="none" stroke="#E3B074" stroke-opacity=".45" stroke-width="1.5"/>
+            <ellipse cx="150" cy="214" rx="46" ry="66" fill="#D19A5A" opacity=".26" filter="url(#soft)"/>
+            <ellipse cx="150" cy="176" rx="26" ry="6" fill="#EAC28A" opacity=".5" filter="url(#soft)"/>
           </g>
 
-          <!-- clear SAFA ice column standing in the coffee -->
-          <polygon points="122,60 178,60 178,318 150,330 122,318" fill="url(#lifeIce)" stroke="#ffffff" stroke-opacity=".45"/>
-          <polygon points="178,60 164,52 136,52 122,60 136,68 164,68" fill="url(#lifeIce)" stroke="#ffffff" stroke-opacity=".5"/>
-          <polygon points="150,60 178,60 178,318 150,330" fill="#0E1116" opacity=".05"/>
-          <line x1="136" y1="62" x2="136" y2="322" stroke="#ffffff" stroke-opacity=".28"/>
-          <line x1="164" y1="62" x2="164" y2="322" stroke="#ffffff" stroke-opacity=".16"/>
-          <rect x="127" y="72" width="5" height="238" rx="2.5" fill="#ffffff" opacity=".32"/>
-          <!-- amber tint where the column sits in the coffee -->
-          <g clip-path="url(#glassIn)"><polygon points="122,156 178,156 178,318 150,330 122,318" fill="#39220F" opacity=".30"/></g>
+          <!-- ===== ICE COLUMN B (behind) ===== -->
+          <g opacity=".97">
+            <polygon points="174,96 185,102 185,330 174,324" fill="url(#iceLeft)"/>
+            <polygon points="185,102 207,102 207,330 185,330" fill="url(#iceCtr)"/>
+            <polygon points="207,102 218,96 218,324 207,330" fill="url(#iceRight)"/>
+            <polygon points="174,96 185,90 207,90 218,96 207,102 185,102" fill="url(#iceTop)"/>
+            <g clip-path="url(#gi)"><polygon points="174,178 218,178 218,324 207,330 185,330 174,324" fill="#2C1808" opacity=".34"/></g>
+            <g fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="1"><polygon points="174,96 185,90 207,90 218,96 207,102 185,102"/><line x1="185" y1="102" x2="185" y2="330"/></g>
+            <rect x="177" y="106" width="3" height="216" rx="1.5" fill="#ffffff" opacity=".4"/>
+          </g>
 
-          <!-- glass front (see-through) + highlight -->
-          <path d="M78,82 L96,400 Q96,412 150,412 Q204,412 204,400 L222,82" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".26" stroke-width="2"/>
-          <ellipse cx="150" cy="82" rx="72" ry="15" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".38" stroke-width="1.5"/>
-          <path d="M92,112 L108,384" stroke="#ffffff" stroke-opacity=".22" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <!-- ===== ICE COLUMN A (front, hero) ===== -->
+          <g>
+            <polygon points="123,63 137,70 137,344 123,337" fill="url(#iceLeft)"/>
+            <polygon points="137,70 163,70 163,344 137,344" fill="url(#iceCtr)"/>
+            <polygon points="163,70 177,63 177,337 163,344" fill="url(#iceRight)"/>
+            <polygon points="123,63 137,56 163,56 177,63 163,70 137,70" fill="url(#iceTop)"/>
+            <!-- amber refraction on the submerged length -->
+            <g clip-path="url(#gi)"><polygon points="123,178 177,178 177,337 163,344 137,344 123,337" fill="#2C1808" opacity=".32"/></g>
+            <!-- crisp edges -->
+            <g fill="none" stroke="#ffffff" stroke-opacity=".62" stroke-width="1.2">
+              <polygon points="123,63 137,56 163,56 177,63 163,70 137,70"/>
+              <line x1="123" y1="63" x2="123" y2="337"/><line x1="137" y1="70" x2="137" y2="344"/><line x1="163" y1="70" x2="163" y2="344"/>
+            </g>
+            <!-- specular highlight + internal refraction + glint -->
+            <rect x="127" y="74" width="5" height="262" rx="2.5" fill="#ffffff" opacity=".55"/>
+            <line x1="150" y1="70" x2="150" y2="344" stroke="#ffffff" stroke-opacity=".22"/>
+            <polygon points="163,56 177,63 168,66 158,60" fill="#ffffff" opacity=".7"/>
+            <circle cx="146" cy="120" r="3" fill="#ffffff" opacity=".8"/>
+            <!-- bright meniscus where the column meets the coffee -->
+            <ellipse cx="150" cy="178" rx="30" ry="5" fill="#ffffff" opacity=".18"/>
+          </g>
 
-          <!-- condensation -->
-          <g fill="#ffffff">
-            <circle cx="110" cy="250" r="2.4" opacity=".38"/><circle cx="118" cy="304" r="1.8" opacity=".3"/>
-            <circle cx="192" cy="232" r="2" opacity=".34"/><circle cx="198" cy="292" r="2.6" opacity=".3"/>
-            <circle cx="182" cy="344" r="1.8" opacity=".26"/><circle cx="116" cy="202" r="1.6" opacity=".3"/>
+          <!-- ===== GLASS FRONT (transparent material) ===== -->
+          <path d="M86,92 L106,430 Q106,442 170,442 Q234,442 234,430 L254,92 Q254,108 170,108 Q86,108 86,92 Z" fill="#ffffff" fill-opacity=".045"/>
+          <!-- frosted, misted lower half -->
+          <g clip-path="url(#gi)"><rect x="80" y="250" width="180" height="192" fill="url(#frost)"/></g>
+          <!-- glass rim thickness -->
+          <ellipse cx="170" cy="92" rx="84" ry="18" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="2.2"/>
+          <ellipse cx="170" cy="95" rx="79" ry="15" fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="1.5"/>
+          <!-- outer silhouette edge -->
+          <path d="M86,92 L106,430 Q106,442 170,442 Q234,442 234,430 L254,92" fill="none" stroke="#ffffff" stroke-opacity=".3" stroke-width="2"/>
+          <!-- soft + sharp specular streaks (left) -->
+          <path d="M104,118 L120,410" stroke="#ffffff" stroke-opacity=".45" stroke-width="7" fill="none" stroke-linecap="round" filter="url(#soft)"/>
+          <path d="M100,120 L116,406" stroke="#ffffff" stroke-opacity=".85" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <!-- window reflection block (upper left) -->
+          <rect x="108" y="128" width="18" height="86" rx="9" fill="#ffffff" opacity=".1" filter="url(#soft)"/>
+          <!-- soft reflection (right) -->
+          <path d="M238,150 L224,404" stroke="#ffffff" stroke-opacity=".22" stroke-width="9" fill="none" stroke-linecap="round" filter="url(#soft)"/>
+
+          <!-- ===== CONDENSATION DROPLETS ===== -->
+          <g>
+            <circle cx="112" cy="250" r="3.4" fill="url(#drp)"/><circle cx="120" cy="312" r="2.2" fill="url(#drp)"/>
+            <circle cx="128" cy="360" r="2.8" fill="url(#drp)"/><circle cx="110" cy="206" r="1.8" fill="url(#drp)"/>
+            <circle cx="224" cy="232" r="2.6" fill="url(#drp)"/><circle cx="230" cy="298" r="3.2" fill="url(#drp)"/>
+            <circle cx="218" cy="356" r="2" fill="url(#drp)"/><circle cx="226" cy="200" r="1.6" fill="url(#drp)"/>
+            <circle cx="150" cy="404" r="2.4" fill="url(#drp)"/><circle cx="196" cy="398" r="2" fill="url(#drp)"/>
+            <circle cx="176" cy="418" r="1.8" fill="url(#drp)"/><circle cx="204" cy="336" r="1.6" fill="url(#drp)"/>
+            <!-- a droplet running down, with a trail -->
+            <path d="M232,300 L232,340" stroke="#ffffff" stroke-opacity=".14" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="232" cy="342" r="3" fill="url(#drp)"/>
           </g>
         </svg>
       </div>
