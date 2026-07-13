@@ -19,13 +19,14 @@
 <title>SAFA — Clarity, frozen. Clear ice for coffee.</title>
 <meta name="description" content="SAFA makes the first clear-ice mold designed for coffee, not cocktails. Four flawless hexagonal ice columns for the perfect iced pour-over. Kuwait → GCC." />
 
-<!-- Fonts.
-     Latin  : Playfair Display (display serif) + Inter (body) + JetBrains Mono (numbers).
-     Arabic : Reem Kufi (geometric display headlines) + IBM Plex Sans Arabic (body).
+<!-- Fonts (English only for now).
+     Playfair Display (display serif) + Inter (body) + JetBrains Mono (numbers).
+     Arabic fonts (Reem Kufi + IBM Plex Sans Arabic) are removed while the Arabic
+     version is disabled — re-add them here to switch Arabic back on.
      Loaded from Google Fonts CDN; graceful fallbacks apply if offline. -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 <style>
 /* ============================================================================
@@ -331,7 +332,8 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
 <nav class="nav" id="nav">
   <a class="brand" href="#top"><span data-i18n="brand">SAFA</span><small>.</small></a>
   <div class="nav-right">
-    <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">العربية</button>
+    <!-- Arabic language toggle removed for now (English only). To re-enable Arabic,
+         restore this button: <button class="lang-toggle" id="langToggle" type="button">العربية</button> -->
     <a class="nav-cta" href="#waitlist" data-i18n="nav.cta">Join the waitlist</a>
   </div>
 </nav>
@@ -859,19 +861,16 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
       if(dict[k] != null) el.setAttribute("placeholder", dict[k]);
     });
 
-    langToggle.textContent = (lang==="ar") ? "English" : "العربية";
+    if(langToggle) langToggle.textContent = (lang==="ar") ? "English" : "العربية";
     currentLang = lang;
     relabelConfigurator(lang);
     renderCount(lang);
     try{ localStorage.setItem("safa_lang", lang); }catch(e){}
   }
 
-  langToggle.addEventListener("click", function(){ applyLang(currentLang==="ar" ? "en" : "ar"); });
-
-  // initial language (remember previous choice)
-  var saved = "en";
-  try{ saved = localStorage.getItem("safa_lang") || "en"; }catch(e){}
-  applyLang(saved);
+  // Arabic version is disabled for now — force English only.
+  if(langToggle) langToggle.addEventListener("click", function(){ applyLang(currentLang==="ar" ? "en" : "ar"); });
+  applyLang("en");
 
   /* ==========================================================================
      [EDIT: WAITLIST]  Front-end form + real backend (Formspree).
