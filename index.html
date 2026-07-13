@@ -351,18 +351,21 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
 .ed-ic span{ display:block; font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); line-height:1.3; }
 
 .ed-diag{ margin-top:22px; }
-.ed-diag svg{ width:132px; height:auto; color:var(--muted); opacity:.75; }
+.ed-diag img{ width:150px; height:auto; display:block; opacity:.9; }
 
-.ed-precision{ padding-right:44%; }
-.ed-precision .col-img{ position:absolute; top:0; right:0; width:44%; height:100%; object-fit:cover; }
-.ed-precision .col-img + span, .ed-precision::after{ content:""; }
+.ed-precision{ padding:0; }
+.ed-precision .ed-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.ed-precision::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(10,12,16,.92) 24%, rgba(10,12,16,.55) 56%, rgba(10,12,16,.12) 100%); }
+.ed-precision-copy{ position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:center; padding:34px 32px; }
+.ed-precision-copy .ed-h{ color:var(--paper); }
+.ed-precision-copy p{ color:var(--muted-dark); max-width:22ch; }
 
 @media(max-width:820px){
   .ed{ padding:88px 0; }
   .ed-grid{ grid-template-columns:1fr; gap:10px; }
   .ed-cell{ aspect-ratio:3/2; }
   .ed-text{ aspect-ratio:auto; padding:40px 30px; }
-  .ed-precision{ padding-right:42%; }
+  .ed-precision-copy{ padding:36px 28px; }
 }
 
 /* ---- FOOTER ------------------------------------------------------------- */
@@ -714,24 +717,17 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
       <div class="ed-cell ed-text reveal">
         <h3 class="ed-h">Two cubes.<br>One perfect<br>iced V60.</h3>
         <p>About 140 g of ice — the sweet spot for clarity, balance, and consistency.</p>
-        <div class="ed-diag">
-          <svg viewBox="0 0 150 66" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
-            <path d="M10 13 l7 -4 l7 4 v32 l-7 4 l-7 -4 z"/><line x1="17" y1="9" x2="17" y2="49"/>
-            <path d="M33 29 h9 M37.5 24.5 v9"/>
-            <path d="M49 13 l7 -4 l7 4 v32 l-7 4 l-7 -4 z"/><line x1="56" y1="9" x2="56" y2="49"/>
-            <path d="M72 29 h12 M80 25 l4 4 -4 4"/>
-            <path d="M94 17 h46 l-17 22 h-12 z"/>
-            <path d="M102 43 h30 v13 a15 12 0 0 1 -30 0 z"/>
-          </svg>
-        </div>
+        <div class="ed-diag"><img src="assets/diagram.png" alt="Two SAFA columns brewed through a V60 into a carafe"></div>
       </div>
       <!-- (3,2) -->
       <div class="ed-cell ed-photo reveal"><img src="assets/box-top.jpg" alt="Close-up of the embossed cork lid of the SAFA mold" loading="lazy"></div>
       <!-- (3,3) -->
-      <div class="ed-cell ed-text dark ed-precision reveal">
-        <h3 class="ed-h">Precision in<br>every column.</h3>
-        <p>Hexagonal columns, engineered for slow melt and maximum clarity.</p>
-        <img class="col-img" src="assets/column-solo.jpg" alt="A single crystal-clear hexagonal ice column" loading="lazy">
+      <div class="ed-cell ed-precision reveal">
+        <img class="ed-bg" src="assets/column-solo.jpg" alt="A single crystal-clear hexagonal ice column" loading="lazy">
+        <div class="ed-precision-copy">
+          <h3 class="ed-h">Precision in<br>every column.</h3>
+          <p>Hexagonal columns, engineered for slow melt and maximum clarity.</p>
+        </div>
       </div>
 
     </div>
