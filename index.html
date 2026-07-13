@@ -327,24 +327,40 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
 .wl-success p{ color:var(--muted-dark); margin:0; }
 @media(max-width:560px){ .wl-form{ flex-direction:column; } .wl-form .btn{ justify-content:center; } .waitlist{ padding:100px 0; } }
 
-/* ---- THE POUR (lifestyle scene) ---------------------------------------- */
-.life{ position:relative; overflow:hidden; background:#15100B; color:var(--paper); padding:130px 0; }
-.life::before{ content:""; position:absolute; inset:0; pointer-events:none;
-  background:radial-gradient(58% 55% at 80% 30%, rgba(201,168,135,.30), transparent 62%),
-            radial-gradient(50% 50% at 12% 82%, rgba(165,211,232,.10), transparent 60%); }
-.life .wrap{ position:relative; }
-.life-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:50px; align-items:center; }
-.life .eyebrow .txt{ color:var(--muted-dark); }
-.life h2{ font-size:clamp(2.4rem,6vw,4.4rem); line-height:1.0; margin:0 0 26px; }
-.life-copy p{ color:var(--muted-dark); max-width:38ch; font-size:1.08rem; line-height:1.6; }
-.life-note{ margin-top:30px !important; font-family:var(--mono); font-size:.82rem; color:var(--ice-1) !important; letter-spacing:.04em; }
-.life-glass{ display:flex; justify-content:center; }
-.life-glass svg{ width:min(330px,72vw); height:auto; animation:float 8s ease-in-out infinite; }
-@media(max-width:860px){
-  .life-grid{ grid-template-columns:1fr; gap:26px; }
-  .life-glass{ order:-1; }
-  .life{ padding:96px 0; }
-  html[dir="rtl"] .life-grid{ text-align:right; }
+/* ---- 05 THE RITUAL (editorial lifestyle grid) -------------------------- */
+.ed{ background:var(--paper); padding:120px 0; }
+.ed .eyebrow{ margin-bottom:34px; }
+.ed-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.ed-cell{ position:relative; aspect-ratio:4/3; border-radius:14px; overflow:hidden; }
+.ed-photo img{ width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.02) brightness(1.01); }
+.ed-photo::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(158deg, rgba(201,168,135,.10), transparent 46%, rgba(20,16,11,.14)); }
+.ed-text{ display:flex; flex-direction:column; justify-content:center; padding:34px 32px; background:var(--paper-2); border:1px solid var(--line); }
+.ed-text.dark{ background:var(--ink); color:var(--paper); border-color:var(--line-dark); }
+.ed-h{ font-family:var(--serif); font-weight:500; line-height:1.03; letter-spacing:-.01em; font-size:clamp(1.6rem,2.3vw,2.15rem); margin:0 0 14px; }
+.ed-text p{ color:var(--muted); font-size:.95rem; line-height:1.55; margin:0; max-width:32ch; }
+.ed-text.dark p{ color:var(--muted-dark); }
+.ed-text .em{ font-style:italic; color:var(--cork); }
+.ed-accent{ margin-top:20px !important; font-family:var(--serif); font-size:1.12rem; color:var(--ink) !important; line-height:1.22; max-width:none !important; }
+
+.ed-icons{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:26px; }
+.ed-ic{ text-align:center; }
+.ed-ic svg{ width:25px; height:25px; margin:0 auto 8px; color:var(--ink); }
+.ed-ic span{ display:block; font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); line-height:1.3; }
+
+.ed-diag{ margin-top:22px; }
+.ed-diag svg{ width:132px; height:auto; color:var(--muted); opacity:.75; }
+
+.ed-precision{ padding-right:44%; }
+.ed-precision .col-img{ position:absolute; top:0; right:0; width:44%; height:100%; object-fit:cover; }
+.ed-precision .col-img + span, .ed-precision::after{ content:""; }
+
+@media(max-width:820px){
+  .ed{ padding:88px 0; }
+  .ed-grid{ grid-template-columns:1fr; gap:10px; }
+  .ed-cell{ aspect-ratio:3/2; }
+  .ed-text{ aspect-ratio:auto; padding:40px 30px; }
+  .ed-precision{ padding-right:42%; }
 }
 
 /* ---- FOOTER ------------------------------------------------------------- */
@@ -646,130 +662,76 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
   </div>
 </section>
 
-<!-- ===================== 05 THE POUR (lifestyle) ===================== -->
-<!-- Illustrated lifestyle scene. To swap in a real photo later, drop an <img> into
-     .life-glass in place of the <svg>, or set a background-image on .life. -->
-<section class="life" id="pour">
+<!-- ===================== 05 THE RITUAL (editorial lifestyle grid) ===================== -->
+<!-- Photos are cropped from the owner's collage, warm-graded, in /assets. Text is native HTML. -->
+<section class="ed" id="pour">
   <div class="wrap">
-    <div class="life-grid">
-      <div class="life-copy">
-        <div class="eyebrow reveal"><span class="no">05</span><span class="txt label">The pour</span></div>
-        <h2 class="display reveal">Two cubes.<br>One perfect pour.</h2>
-        <p class="reveal">Brew hot, directly over two clear SAFA columns — for slower, more controlled dilution, and an iced coffee that stays balanced from first sip to last.</p>
+    <div class="eyebrow reveal"><span class="no">05</span><span class="txt label">The ritual</span></div>
+    <div class="ed-grid">
+
+      <!-- (1,1) -->
+      <div class="ed-cell ed-text reveal">
+        <h3 class="ed-h" style="font-size:clamp(1.9rem,2.9vw,2.6rem)">Clarity,<br>frozen.</h3>
+        <p>The first clear-ice system designed for coffee — <span class="em">not cocktails.</span></p>
+        <p class="ed-accent">Two cubes.<br>One perfect iced V60.</p>
       </div>
-      <div class="life-glass reveal">
-        <svg viewBox="0 0 340 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An iced V60 — a tall glass of specialty coffee poured over two crystal-clear SAFA ice columns, lit like luxury coffee photography">
-          <defs>
-            <radialGradient id="keyGlow" cx="50%" cy="34%" r="58%">
-              <stop offset="0" stop-color="#EACDA2" stop-opacity=".55"/><stop offset="1" stop-color="#EACDA2" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="coffeeRich" x1="0" y1="0" x2="0.25" y2="1">
-              <stop offset="0" stop-color="#B87B41"/><stop offset=".16" stop-color="#8A5024"/><stop offset=".6" stop-color="#4A2A14"/><stop offset="1" stop-color="#21110A"/>
-            </linearGradient>
-            <radialGradient id="crema" cx="42%" cy="34%" r="66%">
-              <stop offset="0" stop-color="#D69A5C"/><stop offset=".6" stop-color="#A2652F"/><stop offset="1" stop-color="#7C4A22"/>
-            </radialGradient>
-            <linearGradient id="iceLeft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6FCFE"/><stop offset="1" stop-color="#D3EAF5"/></linearGradient>
-            <linearGradient id="iceCtr"  x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4F4FC"/><stop offset="1" stop-color="#C2E1F0"/></linearGradient>
-            <linearGradient id="iceRight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6E2F0"/><stop offset="1" stop-color="#A6CEE2"/></linearGradient>
-            <linearGradient id="iceTop"   x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#DCEFF8"/></linearGradient>
-            <radialGradient id="drp" cx="34%" cy="28%" r="72%">
-              <stop offset="0" stop-color="#ffffff" stop-opacity=".92"/><stop offset=".5" stop-color="#D2E2EA" stop-opacity=".4"/><stop offset="1" stop-color="#5E727C" stop-opacity=".18"/>
-            </radialGradient>
-            <linearGradient id="frost" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#ffffff" stop-opacity=".07"/></linearGradient>
-            <clipPath id="gi"><path d="M90,96 L110,426 Q110,438 170,438 Q230,438 230,426 L250,96 Q250,110 170,110 Q90,110 90,96 Z"/></clipPath>
-            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
-            <filter id="soft2" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="17"/></filter>
-          </defs>
+      <!-- (1,2) -->
+      <div class="ed-cell ed-photo reveal"><img src="assets/box-carafe.jpg" alt="The SAFA cork clear-ice mold beside a pour-over carafe on a marble counter" loading="lazy"></div>
+      <!-- (1,3) -->
+      <div class="ed-cell ed-photo reveal"><img src="assets/pourover.jpg" alt="Hot water poured through a V60 over ice for an iced pour-over" loading="lazy"></div>
 
-          <!-- cinematic key light behind the glass -->
-          <ellipse cx="170" cy="196" rx="150" ry="188" fill="url(#keyGlow)"/>
-          <!-- warm café bokeh, out of focus -->
-          <g filter="url(#soft2)" opacity=".6">
-            <circle cx="52" cy="128" r="28" fill="#C9A887"/><circle cx="286" cy="104" r="22" fill="#E9D0AB"/>
-            <circle cx="284" cy="270" r="34" fill="#A9855F"/><circle cx="40" cy="330" r="24" fill="#7E6142"/>
-            <circle cx="176" cy="60" r="16" fill="#E9D0AB"/>
-          </g>
-
-          <!-- contact shadow -->
-          <ellipse cx="170" cy="456" rx="100" ry="15" fill="#000000" opacity=".5" filter="url(#soft)"/>
-
-          <!-- far rim of the glass -->
-          <ellipse cx="170" cy="92" rx="84" ry="18" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="2.5"/>
-
-          <!-- coffee, richly lit -->
-          <g clip-path="url(#gi)">
-            <rect x="88" y="178" width="164" height="262" fill="url(#coffeeRich)"/>
-            <ellipse cx="170" cy="178" rx="78" ry="13" fill="url(#crema)"/>
-            <ellipse cx="170" cy="178" rx="78" ry="13" fill="none" stroke="#E3B074" stroke-opacity=".45" stroke-width="1.5"/>
-            <ellipse cx="150" cy="214" rx="46" ry="66" fill="#D19A5A" opacity=".26" filter="url(#soft)"/>
-            <ellipse cx="150" cy="176" rx="26" ry="6" fill="#EAC28A" opacity=".5" filter="url(#soft)"/>
-          </g>
-
-          <!-- ===== ICE COLUMN B (behind) ===== -->
-          <g opacity=".97">
-            <polygon points="174,96 185,102 185,330 174,324" fill="url(#iceLeft)"/>
-            <polygon points="185,102 207,102 207,330 185,330" fill="url(#iceCtr)"/>
-            <polygon points="207,102 218,96 218,324 207,330" fill="url(#iceRight)"/>
-            <polygon points="174,96 185,90 207,90 218,96 207,102 185,102" fill="url(#iceTop)"/>
-            <g clip-path="url(#gi)"><polygon points="174,178 218,178 218,324 207,330 185,330 174,324" fill="#2C1808" opacity=".34"/></g>
-            <g fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="1"><polygon points="174,96 185,90 207,90 218,96 207,102 185,102"/><line x1="185" y1="102" x2="185" y2="330"/></g>
-            <rect x="177" y="106" width="3" height="216" rx="1.5" fill="#ffffff" opacity=".4"/>
-          </g>
-
-          <!-- ===== ICE COLUMN A (front, hero) ===== -->
-          <g>
-            <polygon points="123,63 137,70 137,344 123,337" fill="url(#iceLeft)"/>
-            <polygon points="137,70 163,70 163,344 137,344" fill="url(#iceCtr)"/>
-            <polygon points="163,70 177,63 177,337 163,344" fill="url(#iceRight)"/>
-            <polygon points="123,63 137,56 163,56 177,63 163,70 137,70" fill="url(#iceTop)"/>
-            <!-- amber refraction on the submerged length -->
-            <g clip-path="url(#gi)"><polygon points="123,178 177,178 177,337 163,344 137,344 123,337" fill="#2C1808" opacity=".32"/></g>
-            <!-- crisp edges -->
-            <g fill="none" stroke="#ffffff" stroke-opacity=".62" stroke-width="1.2">
-              <polygon points="123,63 137,56 163,56 177,63 163,70 137,70"/>
-              <line x1="123" y1="63" x2="123" y2="337"/><line x1="137" y1="70" x2="137" y2="344"/><line x1="163" y1="70" x2="163" y2="344"/>
-            </g>
-            <!-- specular highlight + internal refraction + glint -->
-            <rect x="127" y="74" width="5" height="262" rx="2.5" fill="#ffffff" opacity=".55"/>
-            <line x1="150" y1="70" x2="150" y2="344" stroke="#ffffff" stroke-opacity=".22"/>
-            <polygon points="163,56 177,63 168,66 158,60" fill="#ffffff" opacity=".7"/>
-            <circle cx="146" cy="120" r="3" fill="#ffffff" opacity=".8"/>
-            <!-- bright meniscus where the column meets the coffee -->
-            <ellipse cx="150" cy="178" rx="30" ry="5" fill="#ffffff" opacity=".18"/>
-          </g>
-
-          <!-- ===== GLASS FRONT (transparent material) ===== -->
-          <path d="M86,92 L106,430 Q106,442 170,442 Q234,442 234,430 L254,92 Q254,108 170,108 Q86,108 86,92 Z" fill="#ffffff" fill-opacity=".045"/>
-          <!-- frosted, misted lower half -->
-          <g clip-path="url(#gi)"><rect x="80" y="250" width="180" height="192" fill="url(#frost)"/></g>
-          <!-- glass rim thickness -->
-          <ellipse cx="170" cy="92" rx="84" ry="18" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="2.2"/>
-          <ellipse cx="170" cy="95" rx="79" ry="15" fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="1.5"/>
-          <!-- outer silhouette edge -->
-          <path d="M86,92 L106,430 Q106,442 170,442 Q234,442 234,430 L254,92" fill="none" stroke="#ffffff" stroke-opacity=".3" stroke-width="2"/>
-          <!-- soft + sharp specular streaks (left) -->
-          <path d="M104,118 L120,410" stroke="#ffffff" stroke-opacity=".45" stroke-width="7" fill="none" stroke-linecap="round" filter="url(#soft)"/>
-          <path d="M100,120 L116,406" stroke="#ffffff" stroke-opacity=".85" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-          <!-- window reflection block (upper left) -->
-          <rect x="108" y="128" width="18" height="86" rx="9" fill="#ffffff" opacity=".1" filter="url(#soft)"/>
-          <!-- soft reflection (right) -->
-          <path d="M238,150 L224,404" stroke="#ffffff" stroke-opacity=".22" stroke-width="9" fill="none" stroke-linecap="round" filter="url(#soft)"/>
-
-          <!-- ===== CONDENSATION DROPLETS ===== -->
-          <g>
-            <circle cx="112" cy="250" r="3.4" fill="url(#drp)"/><circle cx="120" cy="312" r="2.2" fill="url(#drp)"/>
-            <circle cx="128" cy="360" r="2.8" fill="url(#drp)"/><circle cx="110" cy="206" r="1.8" fill="url(#drp)"/>
-            <circle cx="224" cy="232" r="2.6" fill="url(#drp)"/><circle cx="230" cy="298" r="3.2" fill="url(#drp)"/>
-            <circle cx="218" cy="356" r="2" fill="url(#drp)"/><circle cx="226" cy="200" r="1.6" fill="url(#drp)"/>
-            <circle cx="150" cy="404" r="2.4" fill="url(#drp)"/><circle cx="196" cy="398" r="2" fill="url(#drp)"/>
-            <circle cx="176" cy="418" r="1.8" fill="url(#drp)"/><circle cx="204" cy="336" r="1.6" fill="url(#drp)"/>
-            <!-- a droplet running down, with a trail -->
-            <path d="M232,300 L232,340" stroke="#ffffff" stroke-opacity=".14" stroke-width="2.4" stroke-linecap="round"/>
-            <circle cx="232" cy="342" r="3" fill="url(#drp)"/>
-          </g>
-        </svg>
+      <!-- (2,1) -->
+      <div class="ed-cell ed-photo reveal"><img src="assets/columns.jpg" alt="Four crystal-clear hexagonal SAFA ice columns on a dark surface" loading="lazy"></div>
+      <!-- (2,2) -->
+      <div class="ed-cell ed-text reveal">
+        <h3 class="ed-h">Designed for<br>the ritual.</h3>
+        <p>Every detail of SAFA is built to elevate your coffee ritual.</p>
+        <div class="ed-icons">
+          <div class="ed-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2v20"/><path d="M3.3 7l17.4 10"/><path d="M20.7 7L3.3 17"/><path d="M12 5.6l2.2-1.3M12 5.6l-2.2-1.3M12 18.4l2.2 1.3M12 18.4l-2.2 1.3"/></svg>
+            <span>Directional freezing</span>
+          </div>
+          <div class="ed-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5v4.5h-4.5"/></svg>
+            <span>Drain &amp; reuse</span>
+          </div>
+          <div class="ed-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2.5l8 7-8 12-8-12z"/><path d="M4 9.5h16"/></svg>
+            <span>Crystal clarity</span>
+          </div>
+          <div class="ed-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2.5l8.5 5v9L12 21.5 3.5 16.5v-9z"/></svg>
+            <span>Premium materials</span>
+          </div>
+        </div>
       </div>
+      <!-- (2,3) -->
+      <div class="ed-cell ed-photo reveal"><img src="assets/shelf.jpg" alt="The SAFA mold styled on a shelf with books and dried flowers" loading="lazy"></div>
+
+      <!-- (3,1) -->
+      <div class="ed-cell ed-text reveal">
+        <h3 class="ed-h">Two cubes.<br>One perfect<br>iced V60.</h3>
+        <p>About 140 g of ice — the sweet spot for clarity, balance, and consistency.</p>
+        <div class="ed-diag">
+          <svg viewBox="0 0 150 66" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M10 13 l7 -4 l7 4 v32 l-7 4 l-7 -4 z"/><line x1="17" y1="9" x2="17" y2="49"/>
+            <path d="M33 29 h9 M37.5 24.5 v9"/>
+            <path d="M49 13 l7 -4 l7 4 v32 l-7 4 l-7 -4 z"/><line x1="56" y1="9" x2="56" y2="49"/>
+            <path d="M72 29 h12 M80 25 l4 4 -4 4"/>
+            <path d="M94 17 h46 l-17 22 h-12 z"/>
+            <path d="M102 43 h30 v13 a15 12 0 0 1 -30 0 z"/>
+          </svg>
+        </div>
+      </div>
+      <!-- (3,2) -->
+      <div class="ed-cell ed-photo reveal"><img src="assets/box-top.jpg" alt="Close-up of the embossed cork lid of the SAFA mold" loading="lazy"></div>
+      <!-- (3,3) -->
+      <div class="ed-cell ed-text dark ed-precision reveal">
+        <h3 class="ed-h">Precision in<br>every column.</h3>
+        <p>Hexagonal columns, engineered for slow melt and maximum clarity.</p>
+        <img class="col-img" src="assets/column-solo.jpg" alt="A single crystal-clear hexagonal ice column" loading="lazy">
+      </div>
+
     </div>
   </div>
 </section>
