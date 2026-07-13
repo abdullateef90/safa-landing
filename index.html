@@ -400,23 +400,14 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
     <div class="eyebrow reveal"><span class="no">02</span><span class="txt label" data-i18n="product.label">The mold</span></div>
     <div class="product-grid">
       <div class="product-visual reveal" id="productVisual">
-        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="productSVG" role="img" aria-label="The SAFA insulated cork clear-ice mold — with freeze-line window and drain-and-reuse plug — beside the clear ice columns it makes">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="productSVG" role="img" aria-label="The SAFA cork-insulated clear-ice mold — a squarish freezer box with a dust lid, a freeze-line window and a drain-and-reuse plug — beside the four clear hex columns it makes each cycle">
           <defs>
             <linearGradient id="iceFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF6FC"/><stop offset="1" stop-color="#A5D3E8"/></linearGradient>
-            <!-- Cork body: horizontal gradient reads as a rounded cylinder (light near centre) -->
-            <linearGradient id="corkBody" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="var(--tint-lo)"/><stop offset=".36" stop-color="var(--tint-hi)"/><stop offset="1" stop-color="var(--tint-lo)"/>
-            </linearGradient>
-            <linearGradient id="corkLid" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="var(--tint-lo)"/><stop offset=".42" stop-color="var(--tint-hi)"/><stop offset="1" stop-color="var(--tint-lo)"/>
-            </linearGradient>
             <linearGradient id="winGlass" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#F4FBFE"/><stop offset="1" stop-color="#CDE9F5"/>
+              <stop offset="0" stop-color="#F4FBFE"/><stop offset=".5" stop-color="#DCEEF7"/><stop offset="1" stop-color="#BFE0EF"/>
             </linearGradient>
-            <clipPath id="bodyClip"><path d="M118,152 L118,318 Q118,350 183,350 Q248,350 248,318 L248,152 Z"/></clipPath>
-            <clipPath id="winClip"><rect x="154" y="180" width="58" height="138" rx="15"/></clipPath>
 
-            <!-- ICE PIECE TEMPLATES — centered on origin; cloned for the window + the pack it makes -->
+            <!-- ICE PIECE TEMPLATES — centered on origin; cloned for the columns it makes -->
             <g id="tmpl-hex">
               <polygon points="-28,-34 -14,-26 -14,50 -28,42" fill="url(#iceFill)"/>
               <polygon points="-14,-26 14,-26 14,50 -14,50" fill="url(#iceFill)"/>
@@ -450,54 +441,53 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
           </defs>
 
           <!-- soft ground shadow -->
-          <ellipse cx="196" cy="372" rx="150" ry="15" fill="#0E1116" opacity=".07"/>
+          <ellipse cx="152" cy="326" rx="118" ry="16" fill="#0E1116" opacity=".08"/>
 
-          <!-- ===== THE MOLD (cork body tinted by the selected colour) ===== -->
+          <!-- ===== THE MOLD: squarish cork-insulated box, 3/4 view (tinted by colour) ===== -->
           <g id="moldGroup">
-            <!-- body -->
-            <path d="M118,152 L118,318 Q118,350 183,350 Q248,350 248,318 L248,152 Z" fill="url(#corkBody)"/>
-            <!-- cylinder shading + cork speckle, clipped to the body -->
-            <g clip-path="url(#bodyClip)">
-              <rect x="118" y="150" width="30" height="204" fill="#ffffff" opacity=".14"/>
-              <rect x="226" y="150" width="22" height="204" fill="#0E1116" opacity=".10"/>
-              <g fill="#0E1116" opacity=".13">
-                <ellipse cx="140" cy="204" rx="2.2" ry="1.5"/><ellipse cx="168" cy="172" rx="1.8" ry="1.3"/>
-                <ellipse cx="206" cy="212" rx="2.3" ry="1.6"/><ellipse cx="232" cy="250" rx="1.9" ry="1.4"/>
-                <ellipse cx="150" cy="300" rx="2.1" ry="1.5"/><ellipse cx="214" cy="322" rx="1.7" ry="1.2"/>
-                <ellipse cx="186" cy="336" rx="1.9" ry="1.3"/><ellipse cx="134" cy="258" rx="1.7" ry="1.2"/>
-                <ellipse cx="200" cy="284" rx="1.6" ry="1.2"/>
-              </g>
-              <g fill="#ffffff" opacity=".18">
-                <ellipse cx="152" cy="226" rx="1.5" ry="1.1"/><ellipse cx="196" cy="188" rx="1.4" ry="1.0"/>
-                <ellipse cx="222" cy="296" rx="1.5" ry="1.1"/><ellipse cx="162" cy="334" rx="1.4" ry="1.0"/>
-              </g>
+            <!-- right side face (darkest) -->
+            <polygon points="206,198 254,168 254,282 206,312" fill="var(--tint-lo)"/>
+            <polygon points="206,198 254,168 254,282 206,312" fill="#0E1116" opacity=".14"/>
+            <!-- front face (mid) -->
+            <polygon points="58,198 206,198 206,312 58,312" fill="var(--tint-hi)"/>
+            <polygon points="58,198 206,198 206,312 58,312" fill="#0E1116" opacity=".05"/>
+            <!-- cork speckle on the front -->
+            <g fill="#0E1116" opacity=".12">
+              <ellipse cx="120" cy="224" rx="2.1" ry="1.5"/><ellipse cx="150" cy="270" rx="1.9" ry="1.4"/>
+              <ellipse cx="182" cy="248" rx="2.2" ry="1.5"/><ellipse cx="112" cy="292" rx="1.8" ry="1.3"/>
+              <ellipse cx="176" cy="296" rx="1.7" ry="1.2"/><ellipse cx="138" cy="300" rx="1.9" ry="1.3"/>
+              <ellipse cx="192" cy="222" rx="1.6" ry="1.2"/><ellipse cx="128" cy="252" rx="1.5" ry="1.1"/>
             </g>
-
-            <!-- freeze-line window (clear ice above the line, water below) -->
-            <g clip-path="url(#winClip)">
-              <rect x="154" y="180" width="58" height="138" fill="url(#winGlass)"/>
-              <g id="windowIce"></g>
-              <rect x="154" y="264" width="58" height="54" fill="#9EC9DD" opacity=".42"/>
-              <line x1="150" y1="264" x2="216" y2="264" stroke="#ffffff" stroke-width="2" stroke-dasharray="5 4"/>
+            <g fill="#ffffff" opacity=".16">
+              <ellipse cx="160" cy="232" rx="1.5" ry="1.1"/><ellipse cx="190" cy="284" rx="1.5" ry="1.1"/>
+              <ellipse cx="110" cy="268" rx="1.4" ry="1.0"/><ellipse cx="146" cy="288" rx="1.4" ry="1.0"/>
             </g>
-            <rect x="154" y="180" width="58" height="138" rx="15" fill="none" stroke="#0E1116" stroke-opacity=".16"/>
-            <rect x="154" y="180" width="10" height="138" rx="0" fill="#ffffff" opacity=".14" clip-path="url(#winClip)"/>
+            <!-- top face = dust lid (lightest) -->
+            <polygon points="58,198 206,198 254,168 106,168" fill="var(--tint-hi)"/>
+            <polygon points="58,198 206,198 254,168 106,168" fill="#ffffff" opacity=".16"/>
+            <!-- lid seam + recessed panel + pull -->
+            <polyline points="58,206 206,206 254,176" fill="none" stroke="#0E1116" stroke-opacity=".12" stroke-width="1.4"/>
+            <polygon points="86,192 190,192 226,170 122,170" fill="none" stroke="#0E1116" stroke-opacity=".10" stroke-width="1.2"/>
+            <ellipse cx="156" cy="181" rx="15" ry="5" fill="#0E1116" opacity=".08"/>
 
-            <!-- top opening + cork lid -->
-            <ellipse cx="183" cy="152" rx="65" ry="17" fill="var(--tint-lo)"/>
-            <ellipse cx="183" cy="152" rx="65" ry="17" fill="#0E1116" opacity=".09"/>
-            <ellipse cx="183" cy="141" rx="68" ry="18" fill="url(#corkLid)"/>
-            <ellipse cx="183" cy="137" rx="68" ry="17" fill="var(--tint-hi)"/>
-            <ellipse cx="183" cy="133" rx="19" ry="5.5" fill="#0E1116" opacity=".07"/>
+            <!-- freeze-line window strip on the front (clear/frozen above the line, water below) -->
+            <rect x="76" y="214" width="18" height="88" rx="7" fill="url(#winGlass)"/>
+            <rect x="76" y="260" width="18" height="42" rx="7" fill="#8FBFD6" opacity=".55"/>
+            <line x1="71" y1="260" x2="99" y2="260" stroke="#ffffff" stroke-width="1.8" stroke-dasharray="4 3"/>
+            <rect x="76" y="214" width="18" height="88" rx="7" fill="none" stroke="#0E1116" stroke-opacity=".18"/>
+            <rect x="79" y="217" width="4" height="82" rx="2" fill="#ffffff" opacity=".28"/>
+            <!-- "ready" mark next to the freeze line -->
+            <path d="M101,257 l7,3 l-7,3 Z" fill="#0E1116" opacity=".38"/>
 
-            <!-- drain-and-reuse plug + water drop (bottom) -->
-            <rect x="170" y="349" width="26" height="13" rx="4" fill="var(--tint-lo)"/>
-            <ellipse cx="183" cy="363" rx="9" ry="4.5" fill="var(--tint-lo)"/>
-            <ellipse cx="183" cy="361" rx="9" ry="4.5" fill="#0E1116" opacity=".12"/>
-            <path d="M150,346 q6.5,7 0,12.5 q-6.5,-5.5 0,-12.5 Z" fill="#A5D3E8" opacity=".9"/>
+            <!-- drain-and-reuse plug at the bottom low point (silicone) + water drop -->
+            <rect x="120" y="311" width="30" height="11" rx="4" fill="#6F6A64"/>
+            <ellipse cx="135" cy="322" rx="15" ry="5.5" fill="#6F6A64"/>
+            <ellipse cx="135" cy="320" rx="15" ry="5.5" fill="#0E1116" opacity=".14"/>
+            <ellipse cx="129" cy="319" rx="4" ry="1.6" fill="#ffffff" opacity=".22"/>
+            <path d="M170,314 q6,6.5 0,12 q-6,-5.5 0,-12 Z" fill="#A5D3E8" opacity=".9"/>
           </g>
 
-          <!-- ===== THE CLEAR ICE IT MAKES (count = pack size, form = shape) ===== -->
+          <!-- ===== THE CLEAR ICE IT MAKES (4 per cycle; count follows pack size) ===== -->
           <g id="iceCluster"></g>
         </svg>
         <div class="plate"></div>
@@ -793,7 +783,6 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
   var langToggle= document.getElementById("langToggle");
   var wlCountLine = document.getElementById("wlCountLine");
   var iceCluster  = document.getElementById("iceCluster");
-  var windowIce   = document.getElementById("windowIce");
   var SVGNS = "http://www.w3.org/2000/svg";
   var XLINK = "http://www.w3.org/1999/xlink";
 
@@ -825,8 +814,7 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
   // full pack it makes (count = size, form = shape). Colour tints the mold itself.
   function renderProduct(){
     var shape = SHAPES[selShape].key, n = SIZES[selSize].count;
-    renderIce(iceCluster, shape, n, 262, 108, 128, 236, colsFor(n)); // the clear ice it makes
-    renderIce(windowIce, shape, 2, 156, 190, 56, 70, 2);             // ice seen in the freeze-line window
+    renderIce(iceCluster, shape, n, 268, 150, 122, 190, colsFor(n)); // the clear columns the mold makes
   }
 
   /* ---- build configurator (once) -----------------------------------------*/
