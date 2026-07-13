@@ -1,0 +1,934 @@
+<!--
+  ============================================================================
+  SAFA — Clear-ice mold for specialty coffee
+  Single-file landing page (inline CSS + JS). No build step required.
+  Just open index.html in any modern browser.
+
+  BILINGUAL: English + real Arabic (RTL). Use the ع / English switch in the
+  top bar. All Arabic copy is native marketing wording, not machine translation.
+
+  QUICK EDIT GUIDE (search for these tags):
+    [EDIT: COLORS]    -> brand palette lives in :root, top of <style>
+    [EDIT: COPY]      -> all English + Arabic text lives in the I18N object (JS)
+    [EDIT: PRODUCT]   -> product colors, sizes, shapes data (JS)
+    [EDIT: WAITLIST]  -> waitlist form + Formspree backend hook-up
+  ============================================================================
+-->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAFA — Clarity, frozen. Clear ice for coffee.</title>
+<meta name="description" content="SAFA makes the first clear-ice mold designed for coffee, not cocktails. Four flawless hexagonal ice columns for the perfect iced pour-over. Kuwait → GCC." />
+
+<!-- Fonts.
+     Latin  : Playfair Display (display serif) + Inter (body) + JetBrains Mono (numbers).
+     Arabic : Reem Kufi (geometric display headlines) + IBM Plex Sans Arabic (body).
+     Loaded from Google Fonts CDN; graceful fallbacks apply if offline. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================================
+   [EDIT: COLORS]  Brand palette
+   ============================================================================ */
+:root{
+  --ink:        #0E1116;   /* near-black */
+  --ink-soft:   #1A1F27;   /* raised surfaces on dark */
+  --paper:      #FAF7F2;   /* warm off-white */
+  --paper-2:    #F1ECE3;   /* slightly deeper paper */
+  --ice-1:      #DCEEF7;   /* light glacial blue */
+  --ice-2:      #A5D3E8;   /* deeper glacial blue */
+  --cork:       #C9A887;   /* cork / amber accent */
+  --line:       rgba(14,17,22,.12);
+  --line-dark:  rgba(250,247,242,.14);
+  --muted:      #6C7079;
+  --muted-dark: #9AA0A9;
+
+  /* Typography (these two vars are swapped to Arabic fonts in RTL mode) */
+  --serif: "Playfair Display", "Times New Roman", Georgia, serif;
+  --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --maxw: 1240px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* ---- Arabic / RTL overrides ---------------------------------------------- */
+html[dir="rtl"]{
+  --serif: "Reem Kufi", "Playfair Display", serif;
+  --sans:  "IBM Plex Sans Arabic", "Inter", sans-serif;
+}
+/* Arabic letters must stay joined — kill letter-spacing & uppercase */
+html[dir="rtl"] .label{ letter-spacing:0; }
+html[dir="rtl"] .brand{ letter-spacing:.02em; }
+html[dir="rtl"] .display{ letter-spacing:0; font-weight:700; line-height:1.14; }
+html[dir="rtl"] .hero h1{ line-height:1.16; }
+html[dir="rtl"] .story-lead{ line-height:1.5; }
+/* mirror the recipe divider */
+html[dir="rtl"] .rv + .rv{ border-left:0; border-right:1px solid var(--line); }
+@media(max-width:620px){ html[dir="rtl"] .rv + .rv{ border-right:0; } }
+/* flip the button arrows */
+html[dir="rtl"] .btn .arrow{ transform:scaleX(-1); }
+html[dir="rtl"] .btn:hover .arrow{ transform:scaleX(-1) translateX(5px); }
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-weight:400; line-height:1.6;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+
+.display{ font-family:var(--serif); font-weight:500; line-height:.98; letter-spacing:-.01em; }
+.label{ font-family:var(--sans); font-weight:500; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; }
+.muted{ color:var(--muted); }
+
+.wrap{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+section{ position:relative; }
+.hairline{ height:1px; background:var(--line); border:0; margin:0; }
+
+.eyebrow{ display:flex; align-items:baseline; gap:18px; margin-bottom:38px; }
+.eyebrow .no{ font-family:var(--serif); font-style:italic; font-weight:400; font-size:1.15rem; color:var(--cork); }
+.eyebrow .txt{ color:var(--muted); }
+
+/* ---- NAV ---------------------------------------------------------------- */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:22px 28px;
+  transition:background .5s var(--ease), padding .5s var(--ease), border-color .5s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(250,247,242,.82);
+  backdrop-filter:saturate(140%) blur(14px); -webkit-backdrop-filter:saturate(140%) blur(14px);
+  padding:14px 28px; border-bottom:1px solid var(--line);
+}
+.brand{ font-family:var(--serif); font-weight:600; font-size:1.42rem; letter-spacing:.16em; text-transform:uppercase; }
+.brand small{ color:var(--cork); }
+.nav-right{ display:flex; align-items:center; gap:6px; }
+.lang-toggle{
+  font-family:"IBM Plex Sans Arabic", var(--sans); font-size:.84rem; font-weight:500; letter-spacing:.02em;
+  background:none; border:0; cursor:pointer; color:var(--ink); padding:10px 10px; opacity:.75;
+  transition:opacity .3s var(--ease);
+}
+.lang-toggle:hover{ opacity:1; }
+.nav-cta{
+  font-family:var(--sans); font-size:.82rem; font-weight:500; letter-spacing:.04em;
+  padding:10px 20px; border:1px solid var(--ink); border-radius:100px; transition:all .4s var(--ease);
+}
+.nav-cta:hover{ background:var(--ink); color:var(--paper); }
+@media(max-width:640px){ .nav-cta{ display:none; } }
+
+/* ---- BUTTONS ------------------------------------------------------------ */
+.btn{
+  display:inline-flex; align-items:center; gap:12px;
+  font-family:var(--sans); font-weight:500; font-size:.95rem; letter-spacing:.01em;
+  padding:17px 34px; border-radius:100px; cursor:pointer;
+  border:1px solid transparent; background:var(--ink); color:var(--paper);
+  transition:transform .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease);
+  will-change:transform;
+}
+.btn:hover{ box-shadow:0 18px 40px -18px rgba(14,17,22,.5); }
+.btn .arrow{ transition:transform .35s var(--ease); }
+.btn:hover .arrow{ transform:translateX(5px); }
+.btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+.btn-ghost:hover{ border-color:var(--ink); }
+
+/* ---- HERO --------------------------------------------------------------- */
+.hero{
+  min-height:100svh; display:flex; align-items:center;
+  padding:120px 0 80px; position:relative; overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 78% 12%, rgba(165,211,232,.28), transparent 60%),
+    radial-gradient(90% 70% at 12% 92%, rgba(201,168,135,.16), transparent 55%),
+    var(--paper);
+}
+.hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center; width:100%; max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+.hero-eyebrow{ color:var(--muted); margin-bottom:30px; display:inline-flex; align-items:center; gap:14px; }
+.hero-eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--cork); }
+.hero h1{ font-size:clamp(3.4rem, 9vw, 7.4rem); margin:0 0 28px; }
+.hero h1 em{ font-style:italic; color:var(--cork); }
+.hero-sub{ font-size:clamp(1.02rem,1.6vw,1.22rem); color:var(--muted); max-width:36ch; margin:0 0 40px; line-height:1.55; }
+.hero-actions{ display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+.hero-meta{ margin-top:52px; display:flex; gap:38px; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:26px; }
+.hero-meta .item .k{ font-family:var(--serif); font-size:1.6rem; }
+.hero-meta .item .v{ font-size:.78rem; color:var(--muted); letter-spacing:.04em; }
+
+.stage{ position:relative; display:flex; align-items:center; justify-content:center; }
+.stage .col-wrap{ animation:float 7s ease-in-out infinite; will-change:transform; }
+@keyframes float{ 0%,100%{ transform:translateY(-10px); } 50%{ transform:translateY(10px); } }
+/* Hero ice — a unique CSS 3D hexagonal ice column: slow rotation, glassy
+   translucent faces, frosted top, suspended bubbles, breathing glow. */
+.ice-scene{ position:relative; width:min(340px,74vw); height:360px; display:flex; align-items:center; justify-content:center; perspective:1100px; }
+.ice-tilt{ position:relative; width:236px; height:300px; transform-style:preserve-3d; transform:rotateX(-16deg); }
+.ice-spin{ position:absolute; inset:0; transform-style:preserve-3d; animation:iceSpin 24s linear infinite; }
+@keyframes iceSpin{ to{ transform:rotateY(360deg); } }
+.ice-face{
+  position:absolute; left:50%; top:50%; width:118px; height:300px; margin:-150px 0 0 -59px; overflow:hidden;
+  background:linear-gradient(180deg, rgba(234,246,252,.60), rgba(120,180,208,.42));
+  border:1px solid rgba(255,255,255,.42);
+  box-shadow:inset 0 0 34px rgba(255,255,255,.30);
+}
+.ice-face::before{ content:""; position:absolute; inset:0; background:linear-gradient(108deg, transparent 34%, rgba(255,255,255,.55) 49%, transparent 60%); }
+.ice-face:nth-child(1){ transform:rotateY(0)      translateZ(102px); }
+.ice-face:nth-child(2){ transform:rotateY(60deg)  translateZ(102px); background:linear-gradient(180deg, rgba(220,238,247,.55), rgba(110,169,198,.40)); }
+.ice-face:nth-child(3){ transform:rotateY(120deg) translateZ(102px); }
+.ice-face:nth-child(4){ transform:rotateY(180deg) translateZ(102px); background:linear-gradient(180deg, rgba(220,238,247,.55), rgba(110,169,198,.40)); }
+.ice-face:nth-child(5){ transform:rotateY(240deg) translateZ(102px); }
+.ice-face:nth-child(6){ transform:rotateY(300deg) translateZ(102px); background:linear-gradient(180deg, rgba(220,238,247,.55), rgba(110,169,198,.40)); }
+.ice-cap{ position:absolute; left:50%; top:50%; width:236px; height:204px; margin:-102px 0 0 -118px;
+  clip-path:polygon(75% 0,100% 50%,75% 100%,25% 100%,0 50%,25% 0); }
+.ice-cap.top{ transform:rotateX(90deg) translateZ(150px);
+  background:radial-gradient(120% 120% at 40% 30%, rgba(248,252,254,.92), rgba(190,224,239,.66)); }
+.ice-cap.bot{ transform:rotateX(90deg) translateZ(-150px);
+  background:linear-gradient(rgba(150,190,212,.5), rgba(120,165,190,.5)); }
+.ice-bubble{ position:absolute; left:50%; top:50%; width:9px; height:9px; margin:-4px; border-radius:50%;
+  background:radial-gradient(circle at 34% 32%, #fff, rgba(255,255,255,.15)); opacity:.7; }
+.ice-bubble.b1{ transform:translate3d(-14px,-60px,26px); }
+.ice-bubble.b2{ transform:translate3d(20px,30px,-10px); width:6px; height:6px; }
+.ice-bubble.b3{ transform:translate3d(-8px,80px,14px); width:5px; height:5px; opacity:.5; }
+.ice-bubble.b4{ transform:translate3d(12px,-20px,-24px); width:7px; height:7px; }
+.stage .glow{ position:absolute; inset:0; z-index:-1; background:radial-gradient(closest-side, rgba(165,211,232,.5), transparent 72%); filter:blur(24px); animation:glowPulse 7s var(--ease) infinite; }
+@keyframes glowPulse{ 0%,100%{ opacity:.75; transform:scale(.96); } 50%{ opacity:1; transform:scale(1.04); } }
+
+@media(max-width:900px){
+  .hero-grid{ grid-template-columns:1fr; text-align:left; gap:10px; }
+  .stage{ order:-1; margin-bottom:8px; }
+  .ice-scene{ height:300px; }
+  .ice-tilt{ transform:rotateX(-16deg) scale(.82); }
+  .hero{ padding-top:110px; }
+  html[dir="rtl"] .hero-grid{ text-align:right; }
+}
+
+/* ---- STORY -------------------------------------------------------------- */
+.story{ background:var(--ink); color:var(--paper); padding:130px 0; }
+.story .eyebrow .txt{ color:var(--muted-dark); }
+.story-lead{ font-family:var(--serif); font-weight:400; font-size:clamp(1.8rem,4.4vw,3.4rem); line-height:1.18; letter-spacing:-.01em; max-width:22ch; }
+.story-cols{ display:grid; grid-template-columns:1fr 1fr; gap:64px; margin-top:80px; }
+.story-cols p{ color:var(--muted-dark); font-size:1.05rem; max-width:44ch; }
+.story-cols .k{ color:var(--ice-2); font-family:var(--serif); font-style:italic; }
+@media(max-width:760px){ .story-cols{ grid-template-columns:1fr; gap:40px; } .story{ padding:90px 0; } }
+
+/* ---- PRODUCT ------------------------------------------------------------ */
+.product{ padding:130px 0; }
+.product-grid{ display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center; }
+.product-visual{
+  position:relative; aspect-ratio:1/1; border-radius:22px;
+  background:radial-gradient(120% 100% at 50% 8%, rgba(165,211,232,.30), transparent 62%), var(--paper-2);
+  border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.product-visual svg{ width:74%; height:auto; }
+.shape-group{ transition:opacity .7s var(--ease), transform .7s var(--ease); transform-origin:center; }
+.shape-hidden{ opacity:0; transform:scale(.82) rotate(-4deg); pointer-events:none; }
+.product-visual .plate{ position:absolute; bottom:12%; left:50%; transform:translateX(-50%); width:60%; height:26px; border-radius:50%; background:radial-gradient(closest-side, rgba(14,17,22,.16), transparent 70%); filter:blur(3px); }
+
+.product-panel h2{ font-size:clamp(2.1rem,4.4vw,3.2rem); margin:.1em 0 .5em; }
+.opt-block{ margin:30px 0; }
+.opt-title{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; }
+.opt-title .now{ color:var(--muted); font-size:.86rem; }
+.swatches{ display:flex; gap:14px; flex-wrap:wrap; }
+.swatch{ width:44px; height:44px; border-radius:50%; cursor:pointer; position:relative; border:1px solid var(--line); transition:transform .3s var(--ease); background:var(--sw); }
+.swatch:hover{ transform:scale(1.08); }
+.swatch[aria-pressed="true"]::after{ content:""; position:absolute; inset:-6px; border-radius:50%; border:1.5px solid var(--ink); }
+.pills{ display:flex; gap:10px; flex-wrap:wrap; }
+.pill{ font-family:var(--sans); font-size:.9rem; font-weight:500; padding:11px 20px; border-radius:100px; cursor:pointer; border:1px solid var(--line); background:transparent; color:var(--ink); transition:all .3s var(--ease); text-align:center; }
+.pill:hover{ border-color:var(--ink); }
+.pill[aria-pressed="true"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.pill small{ display:block; font-weight:400; opacity:.6; font-size:.72rem; margin-top:2px; }
+.spec-row{ margin-top:34px; padding-top:24px; border-top:1px solid var(--line); display:flex; gap:36px; flex-wrap:wrap; }
+.spec-row .s .k{ font-family:var(--serif); font-size:1.3rem; }
+.spec-row .s .v{ font-size:.76rem; color:var(--muted); letter-spacing:.03em; }
+@media(max-width:860px){ .product-grid{ grid-template-columns:1fr; gap:36px; } .product{ padding:90px 0; } }
+
+/* ---- HOW ---------------------------------------------------------------- */
+.how{ background:var(--paper-2); padding:130px 0; }
+.how-steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:34px; margin-top:70px; }
+.step{ background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:34px 30px 30px; }
+.step .sno{ font-family:var(--serif); font-style:italic; color:var(--cork); font-size:1.1rem; }
+.step h3{ font-family:var(--serif); font-weight:500; font-size:1.55rem; margin:.5em 0 .4em; }
+.step p{ color:var(--muted); font-size:.96rem; margin:0; }
+.step.feature{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.step.feature p{ color:var(--muted-dark); }
+.step .anim{ height:120px; margin-bottom:22px; }
+.tag-save{ display:inline-block; margin-top:16px; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink); background:var(--ice-1); padding:6px 12px; border-radius:100px; }
+html[dir="rtl"] .tag-save{ letter-spacing:0; }
+@media(max-width:820px){ .how-steps{ grid-template-columns:1fr; } .how{ padding:90px 0; } }
+
+.freeze-fill{ animation:freezeDown 4s var(--ease) infinite; }
+@keyframes freezeDown{ 0%{ transform:scaleY(0);} 55%{ transform:scaleY(1);} 100%{ transform:scaleY(1);} }
+.drop{ animation:drip 2.6s var(--ease) infinite; }
+@keyframes drip{ 0%{ transform:translateY(-6px); opacity:0; } 30%{ opacity:1;} 100%{ transform:translateY(34px); opacity:0; } }
+.rise{ animation:rise 4s var(--ease) infinite; }
+@keyframes rise{ 0%,55%{ transform:translateY(10px); opacity:.2;} 80%,100%{ transform:translateY(-6px); opacity:1; } }
+
+/* ---- RECIPE ------------------------------------------------------------- */
+.recipe{ padding:130px 0; }
+.recipe-card{ max-width:760px; margin:0 auto; border:1px solid var(--line); border-radius:22px; padding:60px; background:var(--paper); box-shadow:0 30px 60px -40px rgba(14,17,22,.35); }
+.recipe-card .top{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:44px; }
+.recipe-card h2{ font-family:var(--serif); font-weight:500; font-size:2rem; margin:0; }
+.recipe-vals{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.rv{ text-align:center; padding:18px 8px; }
+.rv .n{ font-family:var(--mono); font-weight:500; font-size:clamp(2rem,6vw,3.1rem); letter-spacing:-.02em; }
+.rv .u{ font-family:var(--mono); font-size:.82rem; color:var(--muted); }
+.rv .l{ margin-top:8px; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+html[dir="rtl"] .rv .l{ letter-spacing:0; }
+.rv + .rv{ border-left:1px solid var(--line); }
+.recipe-note{ text-align:center; margin-top:40px; color:var(--muted); font-size:.92rem; }
+.recipe-note b{ color:var(--ink); font-weight:500; }
+@media(max-width:620px){ .recipe-card{ padding:34px 24px; } .recipe-vals{ grid-template-columns:1fr; } .rv + .rv{ border-left:0; border-top:1px solid var(--line); } .recipe{ padding:90px 0; } }
+
+/* ---- WAITLIST ----------------------------------------------------------- */
+.waitlist{ background:var(--ink); color:var(--paper); padding:140px 0; text-align:center; }
+.waitlist .eyebrow{ justify-content:center; }
+.waitlist .eyebrow .txt{ color:var(--muted-dark); }
+.waitlist h2{ font-size:clamp(2.4rem,6vw,4.6rem); margin:0 auto .3em; max-width:16ch; }
+.waitlist p.lead{ color:var(--muted-dark); max-width:46ch; margin:0 auto 44px; font-size:1.06rem; }
+.wl-form{ display:flex; gap:12px; max-width:520px; margin:0 auto; }
+.wl-form input{ flex:1; padding:17px 22px; border-radius:100px; border:1px solid var(--line-dark); background:var(--ink-soft); color:var(--paper); font-family:var(--sans); font-size:1rem; transition:border-color .3s var(--ease); text-align:inherit; }
+.wl-form input::placeholder{ color:var(--muted-dark); }
+.wl-form input:focus{ outline:none; border-color:var(--ice-2); }
+.wl-form .btn{ background:var(--paper); color:var(--ink); white-space:nowrap; }
+.wl-note{ margin-top:20px; font-size:.8rem; color:var(--muted-dark); }
+.wl-count{ margin-top:30px; font-size:.9rem; color:var(--muted-dark); letter-spacing:.04em; }
+.wl-count b{ color:var(--ice-1); font-family:var(--mono); font-weight:500; }
+.wl-success{ max-width:520px; margin:0 auto; opacity:0; height:0; overflow:hidden; transition:opacity .6s var(--ease); }
+.wl-success.show{ opacity:1; height:auto; }
+.wl-success .check{ width:56px; height:56px; margin:0 auto 20px; border-radius:50%; border:1.5px solid var(--ice-2); display:flex; align-items:center; justify-content:center; }
+.wl-success h3{ font-family:var(--serif); font-weight:500; font-size:1.7rem; margin:0 0 10px; }
+.wl-success p{ color:var(--muted-dark); margin:0; }
+@media(max-width:560px){ .wl-form{ flex-direction:column; } .wl-form .btn{ justify-content:center; } .waitlist{ padding:100px 0; } }
+
+/* ---- FOOTER ------------------------------------------------------------- */
+.footer{ background:var(--ink); color:var(--paper); border-top:1px solid var(--line-dark); padding:50px 0; }
+.footer .row{ display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+.footer .brand{ font-size:1.2rem; }
+.footer .tag{ color:var(--muted-dark); font-size:.82rem; letter-spacing:.08em; }
+.footer a.ig{ color:var(--muted-dark); font-size:.85rem; letter-spacing:.05em; transition:color .3s var(--ease); }
+.footer a.ig:hover{ color:var(--ice-1); }
+.footer .legal{ margin-top:28px; color:var(--muted-dark); font-size:.72rem; }
+
+/* ---- SCROLL REVEAL ------------------------------------------------------ */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  .reveal{ opacity:1; transform:none; }
+  .stage .col-wrap{ animation:none; }
+  /* hold the ice at a flattering static angle instead of spinning */
+  .ice-spin{ transform:rotateY(-26deg) !important; }
+}
+</style>
+
+<!-- ========================= NAV ========================= -->
+<nav class="nav" id="nav">
+  <a class="brand" href="#top"><span data-i18n="brand">SAFA</span><small>.</small></a>
+  <div class="nav-right">
+    <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">العربية</button>
+    <a class="nav-cta" href="#waitlist" data-i18n="nav.cta">Join the waitlist</a>
+  </div>
+</nav>
+
+<!-- ========================= HERO ========================= -->
+<header class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="hero-eyebrow label"><span class="dot"></span> <span data-i18n="hero.eyebrow">Clear ice, built for coffee</span></div>
+      <h1 class="display" data-i18n="hero.h1">Clarity,<br><em>frozen.</em></h1>
+      <p class="hero-sub" data-i18n="hero.sub">The first clear-ice mold designed for coffee — not cocktails. Four flawless hexagonal columns that melt slow and keep your pour-over true.</p>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn magnetic"><span data-i18n="nav.cta">Join the waitlist</span> <span class="arrow">→</span></a>
+        <a href="#product" class="btn btn-ghost" data-i18n="hero.cta2">See the mold</a>
+      </div>
+      <div class="hero-meta">
+        <div class="item"><div class="k">4</div><div class="v" data-i18n="hero.m1">crystal-clear columns</div></div>
+        <div class="item"><div class="k">~70g</div><div class="v" data-i18n="hero.m2">each · 40×55 mm</div></div>
+        <div class="item"><div class="k">0%</div><div class="v" data-i18n="hero.m3">wasted water</div></div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="glow"></div>
+      <div class="col-wrap">
+        <div class="ice-scene" role="img" aria-label="A crystal-clear hexagonal ice column slowly rotating and refracting light">
+          <div class="ice-tilt">
+            <div class="ice-spin">
+              <div class="ice-face"></div>
+              <div class="ice-face"></div>
+              <div class="ice-face"></div>
+              <div class="ice-face"></div>
+              <div class="ice-face"></div>
+              <div class="ice-face"></div>
+              <div class="ice-cap top"></div>
+              <div class="ice-cap bot"></div>
+              <div class="ice-bubble b1"></div>
+              <div class="ice-bubble b2"></div>
+              <div class="ice-bubble b3"></div>
+              <div class="ice-bubble b4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== 01 STORY ===================== -->
+<section class="story" id="story">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="no">01</span><span class="txt label" data-i18n="story.label">The ritual</span></div>
+    <p class="story-lead reveal" data-i18n="story.lead">Cloudy ice melts fast, waters down your cup, and quietly ruins a brew you worked to get right.</p>
+    <div class="story-cols">
+      <div class="reveal"><p data-i18n="story.p1"><span class="k">The problem.</span> You dial in the grind, weigh the water, nail the bloom — then drop in a cube of freezer ice that dilutes it in minutes. All that care, gone by the second sip.</p></div>
+      <div class="reveal"><p data-i18n="story.p2"><span class="k">The ritual.</span> SAFA freezes slow and clear, so ice melts at the pace of a proper drink. The recipe you brewed is the recipe you taste — first sip to last.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 02 PRODUCT ===================== -->
+<section class="product" id="product">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="no">02</span><span class="txt label" data-i18n="product.label">The mold</span></div>
+    <div class="product-grid">
+      <div class="product-visual reveal" id="productVisual">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" id="productSVG" role="img" aria-label="SAFA insulated clear-ice mold">
+          <defs>
+            <linearGradient id="iceFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF6FC"/><stop offset="1" stop-color="#A5D3E8"/></linearGradient>
+            <linearGradient id="corkBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--tint-hi)"/><stop offset="1" stop-color="var(--tint-lo)"/></linearGradient>
+          </defs>
+          <g id="moldBody">
+            <ellipse cx="200" cy="150" rx="118" ry="30" fill="var(--tint-hi)"/>
+            <path d="M82,150 L82,300 Q82,338 200,338 Q318,338 318,300 L318,150 Q318,180 200,180 Q82,180 82,150 Z" fill="url(#corkBody)"/>
+            <rect x="150" y="196" width="100" height="118" rx="12" fill="#0E1116" opacity=".14"/>
+            <rect x="150" y="196" width="100" height="118" rx="12" fill="none" stroke="#0E1116" stroke-opacity=".25"/>
+            <rect x="156" y="252" width="88" height="56" rx="7" fill="url(#iceFill)"/>
+            <line x1="150" y1="252" x2="250" y2="252" stroke="#ffffff" stroke-opacity=".8" stroke-width="2" stroke-dasharray="4 4"/>
+            <text x="256" y="256" font-family="JetBrains Mono, monospace" font-size="11" fill="#0E1116" opacity=".5" data-i18n="product.ready">ready</text>
+          </g>
+          <g class="shape-group" data-shape="hex">
+            <polygon points="200,44 244,70 244,120 200,146 156,120 156,70" fill="url(#iceFill)" stroke="#ffffff" stroke-opacity=".7"/>
+            <polyline points="200,44 200,146" stroke="#ffffff" stroke-opacity=".4" fill="none"/>
+            <polygon points="200,44 244,70 200,96 156,70" fill="#ffffff" opacity=".25"/>
+          </g>
+          <g class="shape-group shape-hidden" data-shape="cube">
+            <polygon points="164,78 200,60 236,78 236,120 200,138 164,120" fill="url(#iceFill)" stroke="#ffffff" stroke-opacity=".7"/>
+            <polygon points="164,78 200,60 200,98 164,116" fill="#ffffff" opacity=".22"/>
+            <polygon points="236,78 200,60 200,98 236,116" fill="#ffffff" opacity=".10"/>
+          </g>
+          <g class="shape-group shape-hidden" data-shape="sphere">
+            <circle cx="200" cy="96" r="50" fill="url(#iceFill)" stroke="#ffffff" stroke-opacity=".7"/>
+            <ellipse cx="184" cy="80" rx="18" ry="12" fill="#ffffff" opacity=".35"/>
+          </g>
+        </svg>
+        <div class="plate"></div>
+      </div>
+
+      <div class="product-panel reveal">
+        <span class="label muted" data-i18n="product.configure">Configure</span>
+        <h2 class="display" data-i18n="product.h2">Made to sit on<br>the counter.</h2>
+
+        <div class="opt-block">
+          <div class="opt-title"><span class="label" data-i18n="product.colour">Colour</span><span class="now" id="colorNow">Cork Natural</span></div>
+          <div class="swatches" id="swatches" role="group" aria-label="Choose a colour"></div>
+        </div>
+        <div class="opt-block">
+          <div class="opt-title"><span class="label" data-i18n="product.size">Size</span><span class="now" id="sizeNow">Classic · 4 cubes</span></div>
+          <div class="pills" id="sizes" role="group" aria-label="Choose a size"></div>
+        </div>
+        <div class="opt-block">
+          <div class="opt-title"><span class="label" data-i18n="product.shape">Shape</span><span class="now" id="shapeNow">Hex Column</span></div>
+          <div class="pills" id="shapes" role="group" aria-label="Choose a shape"></div>
+        </div>
+
+        <div class="spec-row">
+          <div class="s"><div class="k">40 × 55 mm</div><div class="v" data-i18n="product.spec1">column · across flats × tall</div></div>
+          <div class="s"><div class="k">~70 g</div><div class="v" data-i18n="product.spec2">per column</div></div>
+          <div class="s"><div class="k" data-i18n="product.spec3k">Cork body</div><div class="v" data-i18n="product.spec3">natural insulation</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 03 HOW ===================== -->
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="no">03</span><span class="txt label" data-i18n="how.label">How it works</span></div>
+    <h2 class="display reveal" data-i18n="how.h2" style="font-size:clamp(2rem,4.4vw,3rem);max-width:16ch;">Directional freezing, top to bottom.</h2>
+    <div class="how-steps">
+      <div class="step reveal">
+        <div class="anim">
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <rect x="42" y="20" width="36" height="80" rx="6" fill="none" stroke="#0E1116" stroke-opacity=".2"/>
+            <rect class="freeze-fill" x="45" y="23" width="30" height="74" rx="4" fill="url(#iceFill)" style="transform-box:fill-box;transform-origin:top;"/>
+            <path d="M60,10 l6,8 h-12 z" fill="#A5D3E8"/>
+          </svg>
+        </div>
+        <span class="sno" data-i18n="how.s1no">Step 01</span>
+        <h3 data-i18n="how.s1t">Freeze top-down</h3>
+        <p data-i18n="how.s1b">An insulated cork body forces ice to grow slowly from the top, pushing every cloudy bubble downward and out of the cube.</p>
+      </div>
+      <div class="step feature reveal">
+        <div class="anim">
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <rect x="40" y="18" width="40" height="52" rx="6" fill="url(#iceFill)"/>
+            <path d="M56,70 h8 v10 h-8 z" fill="#7FB9D4"/>
+            <circle class="drop" cx="60" cy="84" r="4.5" fill="#A5D3E8"/>
+            <path d="M40,104 q20,10 40,0" fill="none" stroke="#A5D3E8" stroke-width="2" opacity=".6"/>
+          </svg>
+        </div>
+        <span class="sno" style="color:var(--ice-2)" data-i18n="how.s2no">Step 02</span>
+        <h3 data-i18n="how.s2t">Drain &amp; reuse</h3>
+        <p data-i18n="how.s2b">The cloudy water underneath never freezes — pull the plug and it drains out as liquid, ready to pour back in.</p>
+        <span class="tag-save" data-i18n="how.s2tag">Saves 30–50% water</span>
+      </div>
+      <div class="step reveal">
+        <div class="anim">
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <polygon class="rise" points="40,60 52,67 52,95 40,88" fill="url(#iceFill)" stroke="#fff" stroke-opacity=".6"/>
+            <polygon class="rise" points="54,54 66,61 66,89 54,82" fill="url(#iceFill)" stroke="#fff" stroke-opacity=".6" style="animation-delay:.3s"/>
+            <polygon class="rise" points="68,54 80,61 80,89 68,82" fill="url(#iceFill)" stroke="#fff" stroke-opacity=".6" style="animation-delay:.6s"/>
+            <polygon class="rise" points="82,60 94,67 94,95 82,88" fill="url(#iceFill)" stroke="#fff" stroke-opacity=".6" style="animation-delay:.9s"/>
+          </svg>
+        </div>
+        <span class="sno" data-i18n="how.s3no">Step 03</span>
+        <h3 data-i18n="how.s3t">Release 4 columns</h3>
+        <p data-i18n="how.s3b">A freeze-line window tells you exactly when they’re done. Flex the mold and four clear columns drop free — two make one perfect iced V60.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 04 RECIPE ===================== -->
+<section class="recipe" id="recipe">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="no">04</span><span class="txt label" data-i18n="recipe.label">The recipe</span></div>
+    <div class="recipe-card reveal">
+      <div class="top">
+        <h2 data-i18n="recipe.h2">Iced V60</h2>
+        <span class="label muted" data-i18n="recipe.single">Single cup</span>
+      </div>
+      <div class="recipe-vals">
+        <div class="rv"><div class="n">26</div><div class="u" data-i18n="recipe.u1">g</div><div class="l" data-i18n="recipe.l1">Coffee</div></div>
+        <div class="rv"><div class="n">286</div><div class="u" data-i18n="recipe.u2">g</div><div class="l" data-i18n="recipe.l2">Hot water</div></div>
+        <div class="rv"><div class="n">2</div><div class="u" data-i18n="recipe.u3">cubes</div><div class="l" data-i18n="recipe.l3">SAFA ice</div></div>
+      </div>
+      <p class="recipe-note" data-i18n="recipe.note">Brew hot over ice at a <b>1 : 11</b> ratio. Two SAFA columns chill without watering it down — the cup stays balanced to the last drop.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 05 WAITLIST ===================== -->
+<!-- [EDIT: WAITLIST] To make signups real, set FORMSPREE_ENDPOINT in the script below. -->
+<section class="waitlist" id="waitlist">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="no">05</span><span class="txt label" data-i18n="wl.label">Early access</span></div>
+    <h2 class="display reveal" data-i18n="wl.h2">Be first to pour clear.</h2>
+    <p class="lead reveal" data-i18n="wl.lead">SAFA launches soon in Kuwait, then across the GCC. Join the waitlist for early access and launch pricing.</p>
+
+    <form class="wl-form reveal" id="wlForm" novalidate>
+      <input type="email" id="wlEmail" name="email" placeholder="your@email.com" data-i18n-ph="wl.ph" autocomplete="email" aria-label="Email address" required />
+      <button type="submit" class="btn magnetic"><span data-i18n="nav.cta">Join the waitlist</span> <span class="arrow">→</span></button>
+    </form>
+
+    <div class="wl-success" id="wlSuccess" role="status" aria-live="polite">
+      <div class="check"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A5D3E8" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h3 data-i18n="wl.st">You’re on the list.</h3>
+      <p data-i18n="wl.sb">We’ll email you the moment SAFA is ready to ship.</p>
+    </div>
+
+    <p class="wl-note reveal" data-i18n="wl.note">No spam. One launch email, and early-access pricing.</p>
+    <p class="wl-count reveal" id="wlCountLine">Join <b>128</b> others waiting.</p>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="row">
+      <span class="brand"><span data-i18n="brand">SAFA</span><small style="color:var(--cork)">.</small></span>
+      <span class="tag" data-i18n="footer.tag">Kuwait → GCC</span>
+      <!-- [EDIT: COPY] replace # with your real Instagram URL -->
+      <a class="ig" href="#" target="_blank" rel="noopener" data-i18n="footer.ig">Instagram ↗</a>
+    </div>
+    <div class="legal" data-i18n="footer.legal">© 2026 SAFA — Clarity, frozen. Clear ice, built for coffee.</div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================================
+   SAFA — interactions + bilingual (EN / AR) engine
+   ============================================================================ */
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ==========================================================================
+     [EDIT: COPY]  All page text lives here — English + native Arabic.
+     Arabic is real marketing copy (Gulf voice), not machine translation.
+     ========================================================================== */
+  var I18N = {
+    en:{
+      "brand":"SAFA",
+      "nav.cta":"Join the waitlist",
+      "hero.eyebrow":"Clear ice, built for coffee",
+      "hero.h1":"Clarity,<br><em>frozen.</em>",
+      "hero.sub":"The first clear-ice mold designed for coffee — not cocktails. Four flawless hexagonal columns that melt slow and keep your pour-over true.",
+      "hero.cta2":"See the mold",
+      "hero.m1":"crystal-clear columns",
+      "hero.m2":"each · 40×55 mm",
+      "hero.m3":"wasted water",
+      "story.label":"The ritual",
+      "story.lead":"Cloudy ice melts fast, waters down your cup, and quietly ruins a brew you worked to get right.",
+      "story.p1":"<span class=\"k\">The problem.</span> You dial in the grind, weigh the water, nail the bloom — then drop in a cube of freezer ice that dilutes it in minutes. All that care, gone by the second sip.",
+      "story.p2":"<span class=\"k\">The ritual.</span> SAFA freezes slow and clear, so ice melts at the pace of a proper drink. The recipe you brewed is the recipe you taste — first sip to last.",
+      "product.label":"The mold",
+      "product.configure":"Configure",
+      "product.h2":"Made to sit on<br>the counter.",
+      "product.colour":"Colour",
+      "product.size":"Size",
+      "product.shape":"Shape",
+      "product.ready":"ready",
+      "product.spec1":"column · across flats × tall",
+      "product.spec2":"per column",
+      "product.spec3k":"Cork body",
+      "product.spec3":"natural insulation",
+      "how.label":"How it works",
+      "how.h2":"Directional freezing, top to bottom.",
+      "how.s1no":"Step 01","how.s1t":"Freeze top-down",
+      "how.s1b":"An insulated cork body forces ice to grow slowly from the top, pushing every cloudy bubble downward and out of the cube.",
+      "how.s2no":"Step 02","how.s2t":"Drain & reuse",
+      "how.s2b":"The cloudy water underneath never freezes — pull the plug and it drains out as liquid, ready to pour back in.",
+      "how.s2tag":"Saves 30–50% water",
+      "how.s3no":"Step 03","how.s3t":"Release 4 columns",
+      "how.s3b":"A freeze-line window tells you exactly when they’re done. Flex the mold and four clear columns drop free — two make one perfect iced V60.",
+      "recipe.label":"The recipe",
+      "recipe.h2":"Iced V60",
+      "recipe.single":"Single cup",
+      "recipe.u1":"g","recipe.l1":"Coffee",
+      "recipe.u2":"g","recipe.l2":"Hot water",
+      "recipe.u3":"cubes","recipe.l3":"SAFA ice",
+      "recipe.note":"Brew hot over ice at a <b>1 : 11</b> ratio. Two SAFA columns chill without watering it down — the cup stays balanced to the last drop.",
+      "wl.label":"Early access",
+      "wl.h2":"Be first to pour clear.",
+      "wl.lead":"SAFA launches soon in Kuwait, then across the GCC. Join the waitlist for early access and launch pricing.",
+      "wl.ph":"your@email.com",
+      "wl.note":"No spam. One launch email, and early-access pricing.",
+      "wl.count":"Join <b>{n}</b> others waiting.",
+      "wl.st":"You’re on the list.",
+      "wl.sb":"We’ll email you the moment SAFA is ready to ship.",
+      "footer.tag":"Kuwait → GCC",
+      "footer.ig":"Instagram ↗",
+      "footer.legal":"© 2026 SAFA — Clarity, frozen. Clear ice, built for coffee.",
+      "title":"SAFA — Clarity, frozen. Clear ice for coffee."
+    },
+    ar:{
+      "brand":"صفا",
+      "nav.cta":"انضمّ لقائمة الانتظار",
+      "hero.eyebrow":"ثلجٌ صافٍ، للقهوة المختصّة",
+      "hero.h1":"الصَّفاء،<br><em>مُجمَّداً.</em>",
+      "hero.sub":"أول قالب ثلجٍ صافٍ صُمّم للقهوة، لا للكوكتيل. أربعة أعمدة سداسية نقيّة تذوب على مهلها وتُبقي فنجانك كما حضّرته تمامًا.",
+      "hero.cta2":"شاهد القالب",
+      "hero.m1":"أعمدة صافية تمامًا",
+      "hero.m2":"للعمود · 40×55 ملم",
+      "hero.m3":"هدرٌ في الماء",
+      "story.label":"الطقس",
+      "story.lead":"الثلج العكِر يذوب بسرعة، يُخفّف فنجانك، ويُفسد بهدوءٍ قهوةً تعبت في تحضيرها.",
+      "story.p1":"<span class=\"k\">المشكلة.</span> تضبط درجة الطحن، تزن الماء، وتُتقن الترطيب — ثم تُسقط مكعّب ثلجٍ من الفريزر يُذيب كل ذلك خلال دقائق. كل هذا الاهتمام يضيع مع الرشفة الثانية.",
+      "story.p2":"<span class=\"k\">الطقس.</span> صفا يتجمّد على مهلٍ وبصفاء، فيذوب الثلج بإيقاع المشروب الصحيح. القهوة التي حضّرتها هي نفسها التي تتذوّقها — من أول رشفةٍ إلى آخرها.",
+      "product.label":"القالب",
+      "product.configure":"اختر ما يناسبك",
+      "product.h2":"صُنِع ليبقى<br>على طاولتك.",
+      "product.colour":"اللون",
+      "product.size":"الحجم",
+      "product.shape":"الشكل",
+      "product.ready":"جاهز",
+      "product.spec1":"العمود · العرض × الارتفاع",
+      "product.spec2":"لكل عمود",
+      "product.spec3k":"جسم فلّين",
+      "product.spec3":"عزلٌ طبيعي",
+      "how.label":"كيف يعمل",
+      "how.h2":"تجميدٌ اتجاهي، من الأعلى إلى الأسفل.",
+      "how.s1no":"الخطوة 01","how.s1t":"تجميدٌ من الأعلى",
+      "how.s1b":"جسم الفلّين العازل يُجبر الثلج على التكوّن ببطءٍ من الأعلى، فيدفع كل فقاعةٍ عكِرة نحو الأسفل وخارج المكعّب.",
+      "how.s2no":"الخطوة 02","how.s2t":"صرفٌ وإعادة استخدام",
+      "how.s2b":"الماء العكِر في الأسفل لا يتجمّد — انزع السدّادة فيخرج سائلًا، جاهزًا لتُعيده إلى القالب من جديد.",
+      "how.s2tag":"يوفّر 30–50٪ من الماء",
+      "how.s3no":"الخطوة 03","how.s3t":"أربعة أعمدة صافية",
+      "how.s3b":"نافذة خط التجمّد تُخبرك بالضبط متى تجهز. اثنِ القالب قليلًا فتنزلق أربعة أعمدة صافية — عمودان يصنعان V60 مثلّجًا مثاليًا.",
+      "recipe.label":"الوصفة",
+      "recipe.h2":"V60 مثلّج",
+      "recipe.single":"فنجان واحد",
+      "recipe.u1":"غ","recipe.l1":"قهوة",
+      "recipe.u2":"غ","recipe.l2":"ماء ساخن",
+      "recipe.u3":"مكعّب","recipe.l3":"ثلج صفا",
+      "recipe.note":"حضّرها ساخنةً فوق الثلج بنسبة <b>1 : 11</b>. عمودان من صفا يبرّدانها دون أن يُخفّفاها — يبقى الفنجان متوازنًا حتى آخر قطرة.",
+      "wl.label":"وصولٌ مبكّر",
+      "wl.h2":"كُن أول من يسكب الصفاء.",
+      "wl.lead":"ينطلق صفا قريبًا في الكويت، ثم في دول الخليج. انضمّ لقائمة الانتظار لتحصل على الوصول المبكّر وسعر الإطلاق.",
+      "wl.ph":"بريدك الإلكتروني",
+      "wl.note":"بلا رسائل مزعجة — رسالة إطلاقٍ واحدة، وسعرٌ خاص للأوائل.",
+      "wl.count":"انضمّ إلى <b>{n}</b> آخرين في الانتظار.",
+      "wl.st":"أنت الآن على القائمة.",
+      "wl.sb":"سنراسلك فور أن يصبح صفا جاهزًا للشحن.",
+      "footer.tag":"الكويت ← الخليج",
+      "footer.ig":"إنستغرام ↗",
+      "footer.legal":"© 2026 صفا — الصفاء مُجمَّداً. ثلجٌ صافٍ، للقهوة.",
+      "title":"صفا — الصفاء مُجمَّداً. ثلجٌ صافٍ للقهوة المختصّة."
+    }
+  };
+
+  /* ==========================================================================
+     [EDIT: PRODUCT]  Configurator data — colors / sizes / shapes (bilingual)
+     ========================================================================== */
+  var COLORS = [
+    {en:"Cork Natural",  ar:"فلّين طبيعي",     sw:"#C9A887", hi:"#D8BE9E", lo:"#A9865F"},
+    {en:"Charcoal",      ar:"فحمي",            sw:"#3A3E44", hi:"#4A4F57", lo:"#24272C"},
+    {en:"Sand",          ar:"رملي",            sw:"#D8C4A0", hi:"#E6D6B8", lo:"#BFA67C"},
+    {en:"Desert Sage",   ar:"مريمية صحراوية",  sw:"#9CA88F", hi:"#AEB9A2", lo:"#7C876F"}
+  ];
+  var SIZES = [
+    {en:"Solo",      ar:"فردي",        subEn:"2 cubes",  subAr:"مكعّبان",   labelEn:"Solo · 2 cubes",       labelAr:"فردي · مكعّبان"},
+    {en:"Classic",   ar:"كلاسيكي",     subEn:"4 cubes",  subAr:"4 مكعّبات", labelEn:"Classic · 4 cubes",    labelAr:"كلاسيكي · 4 مكعّبات"},
+    {en:"Café Pack", ar:"عبوة المقهى", subEn:"12 cubes", subAr:"12 مكعّبًا", labelEn:"Café Pack · 12 cubes", labelAr:"عبوة المقهى · 12 مكعّبًا"}
+  ];
+  var SHAPES = [
+    {en:"Hex Column",   ar:"عمود سداسي",  key:"hex",    subEn:"signature", subAr:"المميّز"},
+    {en:"Classic Cube", ar:"مكعّب كلاسيكي", key:"cube",  subEn:"",          subAr:""},
+    {en:"Sphere",       ar:"كرة",         key:"sphere", subEn:"",          subAr:""}
+  ];
+
+  /* ---- state --------------------------------------------------------------*/
+  var currentLang = "en";
+  var selColor = 0, selSize = 1, selShape = 0;   // defaults: Cork Natural, Classic, Hex
+
+  /* ---- element refs -------------------------------------------------------*/
+  var svg       = document.getElementById("productSVG");
+  var colorNow  = document.getElementById("colorNow");
+  var sizeNow   = document.getElementById("sizeNow");
+  var shapeNow  = document.getElementById("shapeNow");
+  var swWrap    = document.getElementById("swatches");
+  var sizeWrap  = document.getElementById("sizes");
+  var shapeWrap = document.getElementById("shapes");
+  var langToggle= document.getElementById("langToggle");
+  var wlCountLine = document.getElementById("wlCountLine");
+
+  function setTint(c){ svg.style.setProperty("--tint-hi", c.hi); svg.style.setProperty("--tint-lo", c.lo); }
+  function showShape(key){ svg.querySelectorAll(".shape-group").forEach(function(g){ g.classList.toggle("shape-hidden", g.getAttribute("data-shape") !== key); }); }
+
+  /* ---- build configurator (once) -----------------------------------------*/
+  // colours
+  COLORS.forEach(function(c, idx){
+    var b = document.createElement("button");
+    b.className = "swatch"; b.type="button"; b.style.setProperty("--sw", c.sw);
+    b.setAttribute("aria-pressed", idx===selColor ? "true":"false");
+    b.addEventListener("click", function(){
+      selColor = idx;
+      swWrap.querySelectorAll(".swatch").forEach(function(s,i){ s.setAttribute("aria-pressed", i===idx?"true":"false"); });
+      setTint(c); colorNow.textContent = c[currentLang];
+    });
+    swWrap.appendChild(b);
+  });
+  // sizes
+  SIZES.forEach(function(s, idx){
+    var b = document.createElement("button");
+    b.className="pill"; b.type="button";
+    b.setAttribute("aria-pressed", idx===selSize ? "true":"false");
+    b.addEventListener("click", function(){
+      selSize = idx;
+      sizeWrap.querySelectorAll(".pill").forEach(function(p,i){ p.setAttribute("aria-pressed", i===idx?"true":"false"); });
+      sizeNow.textContent = currentLang==="ar" ? s.labelAr : s.labelEn;
+    });
+    sizeWrap.appendChild(b);
+  });
+  // shapes
+  SHAPES.forEach(function(s, idx){
+    var b = document.createElement("button");
+    b.className="pill"; b.type="button";
+    b.setAttribute("aria-pressed", idx===selShape ? "true":"false");
+    b.addEventListener("click", function(){
+      selShape = idx;
+      shapeWrap.querySelectorAll(".pill").forEach(function(p,i){ p.setAttribute("aria-pressed", i===idx?"true":"false"); });
+      shapeNow.textContent = s[currentLang]; showShape(s.key);
+    });
+    shapeWrap.appendChild(b);
+  });
+
+  // (re)label every pill/swatch + "now" fields for the active language
+  function relabelConfigurator(lang){
+    var ar = lang==="ar";
+    swWrap.querySelectorAll(".swatch").forEach(function(b,i){ b.title = COLORS[i][lang]; b.setAttribute("aria-label", COLORS[i][lang]); });
+    sizeWrap.querySelectorAll(".pill").forEach(function(b,i){ b.innerHTML = SIZES[i][lang] + "<small>"+(ar?SIZES[i].subAr:SIZES[i].subEn)+"</small>"; });
+    shapeWrap.querySelectorAll(".pill").forEach(function(b,i){
+      var sub = ar?SHAPES[i].subAr:SHAPES[i].subEn;
+      b.innerHTML = SHAPES[i][lang] + (sub ? "<small>"+sub+"</small>" : "");
+    });
+    colorNow.textContent = COLORS[selColor][lang];
+    sizeNow.textContent  = ar ? SIZES[selSize].labelAr : SIZES[selSize].labelEn;
+    shapeNow.textContent = SHAPES[selShape][lang];
+  }
+
+  setTint(COLORS[selColor]); showShape(SHAPES[selShape].key);
+
+  /* ---- waitlist counter line ----------------------------------------------*/
+  var BASE_COUNT = 128;                 // starting counter number (placeholder)
+  var currentCount = BASE_COUNT;
+  function renderCount(lang){
+    var tpl = I18N[lang]["wl.count"] || "";
+    wlCountLine.innerHTML = tpl.replace("{n}", currentCount);
+  }
+
+  /* ==========================================================================
+     LANGUAGE ENGINE
+     ========================================================================== */
+  function applyLang(lang){
+    if(!I18N[lang]) lang = "en";
+    var dict = I18N[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir  = (lang==="ar") ? "rtl" : "ltr";
+    document.title = dict["title"];
+
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n");
+      if(dict[k] != null) el.innerHTML = dict[k];
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function(el){
+      var k = el.getAttribute("data-i18n-ph");
+      if(dict[k] != null) el.setAttribute("placeholder", dict[k]);
+    });
+
+    langToggle.textContent = (lang==="ar") ? "English" : "العربية";
+    currentLang = lang;
+    relabelConfigurator(lang);
+    renderCount(lang);
+    try{ localStorage.setItem("safa_lang", lang); }catch(e){}
+  }
+
+  langToggle.addEventListener("click", function(){ applyLang(currentLang==="ar" ? "en" : "ar"); });
+
+  // initial language (remember previous choice)
+  var saved = "en";
+  try{ saved = localStorage.getItem("safa_lang") || "en"; }catch(e){}
+  applyLang(saved);
+
+  /* ==========================================================================
+     [EDIT: WAITLIST]  Front-end form + real backend (Formspree).
+     --------------------------------------------------------------------------
+     >>> TO MAKE SIGNUPS REAL, DO THIS ONCE (about 3 minutes, no coding): <<<
+       1. Go to  https://formspree.io  and create a free account.
+       2. Create a new form. It gives you a URL like:
+              https://formspree.io/f/abcdwxyz
+       3. Copy that URL and paste it between the quotes below,
+          replacing  https://formspree.io/f/YOUR_FORM_ID .
+       4. Save the file. Done — every signup now lands in your Formspree inbox.
+     Until you do that, the form still works visually (shows success), but the
+     email is only kept in the `waitlist` array below (cleared on refresh).
+     ========================================================================== */
+  var FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID"; // <-- paste your Formspree URL here
+  var waitlist = [];            // emails collected this session (front-end only)
+
+  var form       = document.getElementById("wlForm");
+  var emailInput = document.getElementById("wlEmail");
+  var successEl  = document.getElementById("wlSuccess");
+
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function sendToBackend(email){
+    // Only calls out if you've configured a real endpoint above.
+    if(FORMSPREE_ENDPOINT.indexOf("YOUR_FORM_ID") !== -1) return;
+    var fd = new FormData();
+    fd.append("email", email);
+    fd.append("_subject", "New SAFA waitlist signup");
+    fetch(FORMSPREE_ENDPOINT, { method:"POST", body:fd, headers:{ "Accept":"application/json" } })
+      .catch(function(err){ console.warn("Waitlist backend error:", err); });
+  }
+
+  function submitEmail(email){
+    waitlist.push(email);
+    sendToBackend(email);
+    currentCount = BASE_COUNT + waitlist.length;
+    renderCount(currentLang);
+    form.style.display = "none";
+    successEl.classList.add("show");
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var email = emailInput.value.trim();
+    if(!validEmail(email)){ emailInput.style.borderColor = "#C9A887"; emailInput.focus(); return; }
+    submitEmail(email);
+  });
+
+  /* ==========================================================================
+     MOTION & SCROLL
+     ========================================================================== */
+  // nav background on scroll
+  var nav = document.getElementById("nav");
+  function onScroll(){ nav.classList.toggle("scrolled", window.scrollY > 40); }
+  window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+
+  // scroll reveal with stagger
+  var revealEls = [].slice.call(document.querySelectorAll(".reveal"));
+  if(reduceMotion){ revealEls.forEach(function(el){ el.classList.add("in"); }); }
+  else if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var el = en.target;
+          var sibs = [].slice.call(el.parentNode.querySelectorAll(":scope > .reveal"));
+          var i = sibs.indexOf(el);
+          el.style.transitionDelay = (i > 0 ? i*90 : 0) + "ms";
+          el.classList.add("in"); io.unobserve(el);
+        }
+      });
+    }, {threshold:0.16, rootMargin:"0px 0px -8% 0px"});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else { revealEls.forEach(function(el){ el.classList.add("in"); }); }
+
+  // subtle hero parallax
+  var colWrap = document.querySelector(".stage .col-wrap");
+  if(colWrap && !reduceMotion){
+    window.addEventListener("scroll", function(){
+      var y = window.scrollY;
+      if(y < window.innerHeight){ colWrap.style.transform = "translateY(" + (y*0.08) + "px)"; }
+    }, {passive:true});
+  }
+
+  // magnetic buttons
+  if(!reduceMotion && window.matchMedia("(hover:hover)").matches){
+    document.querySelectorAll(".magnetic").forEach(function(btn){
+      btn.addEventListener("mousemove", function(e){
+        var r = btn.getBoundingClientRect();
+        btn.style.transform = "translate(" + ((e.clientX-r.left-r.width/2)*0.18) + "px," + ((e.clientY-r.top-r.height/2)*0.28) + "px)";
+      });
+      btn.addEventListener("mouseleave", function(){ btn.style.transform = ""; });
+    });
+  }
+
+  // count-up when the waitlist scrolls into view
+  if("IntersectionObserver" in window && !reduceMotion){
+    var seen = false;
+    var cObs = new IntersectionObserver(function(ents){
+      ents.forEach(function(en){
+        if(en.isIntersecting && !seen){
+          seen = true;
+          var target = currentCount, from = Math.max(0, target-46), t0=null;
+          function tick(ts){
+            if(!t0) t0 = ts;
+            var p = Math.min(1, (ts-t0)/900);
+            var val = Math.round(from + (target-from)*p);
+            var b = wlCountLine.querySelector("b"); if(b) b.textContent = val;
+            if(p<1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+      });
+    }, {threshold:0.6});
+    cObs.observe(wlCountLine);
+  }
+})();
+</script>
