@@ -327,6 +327,26 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
 .wl-success p{ color:var(--muted-dark); margin:0; }
 @media(max-width:560px){ .wl-form{ flex-direction:column; } .wl-form .btn{ justify-content:center; } .waitlist{ padding:100px 0; } }
 
+/* ---- THE POUR (lifestyle scene) ---------------------------------------- */
+.life{ position:relative; overflow:hidden; background:#15100B; color:var(--paper); padding:130px 0; }
+.life::before{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(58% 55% at 80% 30%, rgba(201,168,135,.30), transparent 62%),
+            radial-gradient(50% 50% at 12% 82%, rgba(165,211,232,.10), transparent 60%); }
+.life .wrap{ position:relative; }
+.life-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:50px; align-items:center; }
+.life .eyebrow .txt{ color:var(--muted-dark); }
+.life h2{ font-size:clamp(2.4rem,6vw,4.4rem); line-height:1.0; margin:0 0 26px; }
+.life-copy p{ color:var(--muted-dark); max-width:38ch; font-size:1.08rem; line-height:1.6; }
+.life-note{ margin-top:30px !important; font-family:var(--mono); font-size:.82rem; color:var(--ice-1) !important; letter-spacing:.04em; }
+.life-glass{ display:flex; justify-content:center; }
+.life-glass svg{ width:min(330px,72vw); height:auto; animation:float 8s ease-in-out infinite; }
+@media(max-width:860px){
+  .life-grid{ grid-template-columns:1fr; gap:26px; }
+  .life-glass{ order:-1; }
+  .life{ padding:96px 0; }
+  html[dir="rtl"] .life-grid{ text-align:right; }
+}
+
 /* ---- FOOTER ------------------------------------------------------------- */
 .footer{ background:var(--ink); color:var(--paper); border-top:1px solid var(--line-dark); padding:50px 0; }
 .footer .row{ display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
@@ -626,11 +646,79 @@ html[dir="rtl"] .rv .l{ letter-spacing:0; }
   </div>
 </section>
 
+<!-- ===================== 05 THE POUR (lifestyle) ===================== -->
+<!-- Illustrated lifestyle scene. To swap in a real photo later, drop an <img> into
+     .life-glass in place of the <svg>, or set a background-image on .life. -->
+<section class="life" id="pour">
+  <div class="wrap">
+    <div class="life-grid">
+      <div class="life-copy">
+        <div class="eyebrow reveal"><span class="no">05</span><span class="txt label">The pour</span></div>
+        <h2 class="display reveal">Two cubes.<br>One perfect pour.</h2>
+        <p class="reveal">Brew hot, straight over two clear SAFA columns. They chill your iced V60 without watering it down — so the last sip tastes exactly like the first.</p>
+        <p class="life-note reveal">Kuwait → GCC · launching soon</p>
+      </div>
+      <div class="life-glass reveal">
+        <svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An iced V60 — a tall glass of specialty coffee poured over a single crystal-clear SAFA ice column, on a warm café counter">
+          <defs>
+            <linearGradient id="coffee" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A6338"/><stop offset="1" stop-color="#39220F"/></linearGradient>
+            <linearGradient id="lifeIce" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF8FD"/><stop offset="1" stop-color="#BBDDEC"/></linearGradient>
+            <clipPath id="glassIn"><path d="M80,84 L98,398 Q98,409 150,409 Q202,409 202,398 L220,84 Q220,97 150,97 Q80,97 80,84 Z"/></clipPath>
+            <filter id="bok" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="15"/></filter>
+          </defs>
+
+          <!-- warm café bokeh -->
+          <g filter="url(#bok)" opacity=".55">
+            <circle cx="54" cy="120" r="26" fill="#C9A887"/>
+            <circle cx="256" cy="96" r="20" fill="#E7CFAA"/>
+            <circle cx="248" cy="250" r="30" fill="#A9855F"/>
+            <circle cx="40" cy="316" r="22" fill="#7E6142"/>
+          </g>
+
+          <!-- counter reflection -->
+          <ellipse cx="150" cy="428" rx="92" ry="12" fill="#000000" opacity=".38"/>
+
+          <!-- glass back rim -->
+          <ellipse cx="150" cy="84" rx="72" ry="15" fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="2"/>
+
+          <!-- coffee -->
+          <g clip-path="url(#glassIn)">
+            <rect x="78" y="156" width="144" height="256" fill="url(#coffee)"/>
+            <ellipse cx="150" cy="156" rx="64" ry="10" fill="#A96D3E"/>
+          </g>
+
+          <!-- clear SAFA ice column standing in the coffee -->
+          <polygon points="122,60 178,60 178,318 150,330 122,318" fill="url(#lifeIce)" stroke="#ffffff" stroke-opacity=".45"/>
+          <polygon points="178,60 164,52 136,52 122,60 136,68 164,68" fill="url(#lifeIce)" stroke="#ffffff" stroke-opacity=".5"/>
+          <polygon points="150,60 178,60 178,318 150,330" fill="#0E1116" opacity=".05"/>
+          <line x1="136" y1="62" x2="136" y2="322" stroke="#ffffff" stroke-opacity=".28"/>
+          <line x1="164" y1="62" x2="164" y2="322" stroke="#ffffff" stroke-opacity=".16"/>
+          <rect x="127" y="72" width="5" height="238" rx="2.5" fill="#ffffff" opacity=".32"/>
+          <!-- amber tint where the column sits in the coffee -->
+          <g clip-path="url(#glassIn)"><polygon points="122,156 178,156 178,318 150,330 122,318" fill="#39220F" opacity=".30"/></g>
+
+          <!-- glass front (see-through) + highlight -->
+          <path d="M78,82 L96,400 Q96,412 150,412 Q204,412 204,400 L222,82" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".26" stroke-width="2"/>
+          <ellipse cx="150" cy="82" rx="72" ry="15" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".38" stroke-width="1.5"/>
+          <path d="M92,112 L108,384" stroke="#ffffff" stroke-opacity=".22" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+          <!-- condensation -->
+          <g fill="#ffffff">
+            <circle cx="110" cy="250" r="2.4" opacity=".38"/><circle cx="118" cy="304" r="1.8" opacity=".3"/>
+            <circle cx="192" cy="232" r="2" opacity=".34"/><circle cx="198" cy="292" r="2.6" opacity=".3"/>
+            <circle cx="182" cy="344" r="1.8" opacity=".26"/><circle cx="116" cy="202" r="1.6" opacity=".3"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== 05 WAITLIST ===================== -->
 <!-- [EDIT: WAITLIST] To make signups real, set FORMSPREE_ENDPOINT in the script below. -->
 <section class="waitlist" id="waitlist">
   <div class="wrap">
-    <div class="eyebrow reveal"><span class="no">05</span><span class="txt label" data-i18n="wl.label">Early access</span></div>
+    <div class="eyebrow reveal"><span class="no">06</span><span class="txt label" data-i18n="wl.label">Early access</span></div>
     <h2 class="display reveal" data-i18n="wl.h2">Be first to pour clear.</h2>
     <p class="lead reveal" data-i18n="wl.lead">SAFA launches soon in Kuwait, then across the GCC. Join the waitlist for early access and launch pricing.</p>
 
